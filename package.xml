@@ -23,7 +23,7 @@
   <email>mike@maintainable.com</email>
   <active>no</active>
  </lead>
- <date>2017-10-16</date>
+ <date>2017-10-17</date>
  <version>
   <release>2.1.1</release>
   <api>1.1.0</api>
@@ -43,7 +43,6 @@
      <dir name="Argv">
       <file name="ADVANCED" role="doc" />
       <file name="CALLBACKS" role="doc" />
-      <file name="COPYING" role="doc" />
       <file name="DOCS_ORIGIN" role="doc" />
       <file name="EXTEND" role="doc" />
       <file name="UPGRADING" role="doc" />
@@ -371,6 +370,7 @@
      </dir> <!-- /test/Horde/Argv -->
     </dir> <!-- /test/Horde -->
    </dir> <!-- /test -->
+   <file name="LICENSE" role="doc" />
    <file name="README.rst" role="doc" />
   </dir> <!-- / -->
  </contents>
@@ -425,10 +425,8 @@
  </dependencies>
  <phprelease>
   <filelist>
-   <install as="README.rst" name="README.rst" />
    <install as="ADVANCED" name="doc/Horde/Argv/ADVANCED" />
    <install as="CALLBACKS" name="doc/Horde/Argv/CALLBACKS" />
-   <install as="COPYING" name="doc/Horde/Argv/COPYING" />
    <install as="DOCS_ORIGIN" name="doc/Horde/Argv/DOCS_ORIGIN" />
    <install as="EXTEND" name="doc/Horde/Argv/EXTEND" />
    <install as="UPGRADING" name="doc/Horde/Argv/UPGRADING" />
@@ -447,7 +445,7 @@
    <install as="Horde/Argv/TitledHelpFormatter.php" name="lib/Horde/Argv/TitledHelpFormatter.php" />
    <install as="Horde/Argv/Translation.php" name="lib/Horde/Argv/Translation.php" />
    <install as="Horde/Argv/Values.php" name="lib/Horde/Argv/Values.php" />
-   <install as="locale/Horde_Argv.pot" name="locale/Horde_Argv.pot" />
+   <install as="LICENSE" name="LICENSE" />
    <install as="locale/ar/LC_MESSAGES/Horde_Argv.mo" name="locale/ar/LC_MESSAGES/Horde_Argv.mo" />
    <install as="locale/ar/LC_MESSAGES/Horde_Argv.po" name="locale/ar/LC_MESSAGES/Horde_Argv.po" />
    <install as="locale/bg/LC_MESSAGES/Horde_Argv.mo" name="locale/bg/LC_MESSAGES/Horde_Argv.mo" />
@@ -480,6 +478,7 @@
    <install as="locale/gl/LC_MESSAGES/Horde_Argv.po" name="locale/gl/LC_MESSAGES/Horde_Argv.po" />
    <install as="locale/he/LC_MESSAGES/Horde_Argv.mo" name="locale/he/LC_MESSAGES/Horde_Argv.mo" />
    <install as="locale/he/LC_MESSAGES/Horde_Argv.po" name="locale/he/LC_MESSAGES/Horde_Argv.po" />
+   <install as="locale/Horde_Argv.pot" name="locale/Horde_Argv.pot" />
    <install as="locale/hr/LC_MESSAGES/Horde_Argv.mo" name="locale/hr/LC_MESSAGES/Horde_Argv.mo" />
    <install as="locale/hr/LC_MESSAGES/Horde_Argv.po" name="locale/hr/LC_MESSAGES/Horde_Argv.po" />
    <install as="locale/hu/LC_MESSAGES/Horde_Argv.mo" name="locale/hu/LC_MESSAGES/Horde_Argv.mo" />
@@ -532,6 +531,7 @@
    <install as="locale/zh_CN/LC_MESSAGES/Horde_Argv.po" name="locale/zh_CN/LC_MESSAGES/Horde_Argv.po" />
    <install as="locale/zh_TW/LC_MESSAGES/Horde_Argv.mo" name="locale/zh_TW/LC_MESSAGES/Horde_Argv.mo" />
    <install as="locale/zh_TW/LC_MESSAGES/Horde_Argv.po" name="locale/zh_TW/LC_MESSAGES/Horde_Argv.po" />
+   <install as="README.rst" name="README.rst" />
    <install as="Horde/Argv/AllTests.php" name="test/Horde/Argv/AllTests.php" />
    <install as="Horde/Argv/BoolTest.php" name="test/Horde/Argv/BoolTest.php" />
    <install as="Horde/Argv/bootstrap.php" name="test/Horde/Argv/bootstrap.php" />
@@ -945,7 +945,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-10-16</date>
+   <date>2017-10-17</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
 * 
