@@ -41,11 +41,11 @@
    <dir name="doc">
     <dir name="Horde">
      <dir name="Argv">
-      <file name="ADVANCED" role="doc" />
-      <file name="CALLBACKS" role="doc" />
-      <file name="DOCS_ORIGIN" role="doc" />
-      <file name="EXTEND" role="doc" />
-      <file name="UPGRADING" role="doc" />
+      <file name="ADVANCED.rst" role="doc" />
+      <file name="CALLBACKS.rst" role="doc" />
+      <file name="DOCS_ORIGIN.rst" role="doc" />
+      <file name="EXTEND.rst" role="doc" />
+      <file name="UPGRADING.rst" role="doc" />
      </dir> <!-- /doc/Horde/Argv -->
     </dir> <!-- /doc/Horde -->
    </dir> <!-- /doc -->
@@ -425,11 +425,11 @@
  </dependencies>
  <phprelease>
   <filelist>
-   <install as="ADVANCED" name="doc/Horde/Argv/ADVANCED" />
-   <install as="CALLBACKS" name="doc/Horde/Argv/CALLBACKS" />
-   <install as="DOCS_ORIGIN" name="doc/Horde/Argv/DOCS_ORIGIN" />
-   <install as="EXTEND" name="doc/Horde/Argv/EXTEND" />
-   <install as="UPGRADING" name="doc/Horde/Argv/UPGRADING" />
+   <install as="ADVANCED.rst" name="doc/Horde/Argv/ADVANCED.rst" />
+   <install as="CALLBACKS.rst" name="doc/Horde/Argv/CALLBACKS.rst" />
+   <install as="DOCS_ORIGIN.rst" name="doc/Horde/Argv/DOCS_ORIGIN.rst" />
+   <install as="EXTEND.rst" name="doc/Horde/Argv/EXTEND.rst" />
+   <install as="UPGRADING.rst" name="doc/Horde/Argv/UPGRADING.rst" />
    <install as="Horde/Argv/AmbiguousOptionException.php" name="lib/Horde/Argv/AmbiguousOptionException.php" />
    <install as="Horde/Argv/BadOptionException.php" name="lib/Horde/Argv/BadOptionException.php" />
    <install as="Horde/Argv/Exception.php" name="lib/Horde/Argv/Exception.php" />
