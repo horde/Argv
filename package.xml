@@ -23,7 +23,7 @@
   <email>mike@maintainable.com</email>
   <active>no</active>
  </lead>
- <date>2017-10-20</date>
+ <date>2017-10-27</date>
  <version>
   <release>2.1.1</release>
   <api>1.1.0</api>
@@ -42,6 +42,7 @@
      <dir name="Argv">
       <file name="ADVANCED.rst" role="doc" />
       <file name="CALLBACKS.rst" role="doc" />
+      <file name="CHANGES" role="doc" />
       <file name="DOCS_ORIGIN.rst" role="doc" />
       <file name="EXTEND.rst" role="doc" />
       <file name="UPGRADING.rst" role="doc" />
@@ -425,6 +426,7 @@
   <filelist>
    <install as="ADVANCED.rst" name="doc/Horde/Argv/ADVANCED.rst" />
    <install as="CALLBACKS.rst" name="doc/Horde/Argv/CALLBACKS.rst" />
+   <install as="CHANGES" name="doc/Horde/Argv/CHANGES" />
    <install as="DOCS_ORIGIN.rst" name="doc/Horde/Argv/DOCS_ORIGIN.rst" />
    <install as="EXTEND.rst" name="doc/Horde/Argv/EXTEND.rst" />
    <install as="UPGRADING.rst" name="doc/Horde/Argv/UPGRADING.rst" />
@@ -942,7 +944,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-10-20</date>
+   <date>2017-10-27</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
    </notes>

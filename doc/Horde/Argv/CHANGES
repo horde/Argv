@@ -1,0 +1,197 @@
+----------
+v2.1.1-git
+----------
+
+
+------
+v2.1.0
+------
+
+[jan] Colorize output.
+[jan] Add Horde_Argv_HelpFormatter#highlightHeading() and 
+      Horde_Argv_HelpFormatter#highlightOption().
+
+
+-------
+v2.0.12
+-------
+
+[jan] Mark PHP 7 as supported.
+
+
+-------
+v2.0.11
+-------
+
+[jan] Fix issues with certain locales like Turkish.
+
+
+-------
+v2.0.10
+-------
+
+[jan] Support loading translations from Composer-installed package.
+[jan] Improve PSR-2 compatibility.
+
+
+------
+v2.0.9
+------
+
+[jan] Update Hungarian translation (Andras Galos <galosa@netinform.hu>).
+
+
+------
+v2.0.8
+------
+
+[jan] Update Ukrainian translation.
+
+
+------
+v2.0.7
+------
+
+[jan] Re-release of broken package.
+
+
+------
+v2.0.6
+------
+
+[jan] Fix documentation formatting.
+
+
+------
+v2.0.5
+------
+
+[jan] Add extensive documention.
+
+
+------
+v2.0.4
+------
+
+[jan] Update French translation (Paul De Vlieger
+      <paul.de_vlieger@moniut.univ-bpclermont.fr>).
+
+
+------
+v2.0.3
+------
+
+[jan] Update Basque translation (Ibon Igartua <ibon.igartua@ehu.es>).
+
+
+------
+v2.0.2
+------
+
+[mms] Use new Horde_Test layout.
+
+
+------
+v2.0.1
+------
+
+[jan] Update Dutch translation (Arjen de Korte <build+horde@de-korte.org>).
+
+
+------
+v2.0.0
+------
+
+First stable release for Horde 5.
+
+
+-----------
+v2.0.0beta1
+-----------
+
+First beta release for Horde 5.
+
+
+------------
+v2.0.0alpha1
+------------
+
+First alpha release for Horde 5.
+
+
+------
+v1.0.5
+------
+
+[jan] Update Estonian translation.
+[jan] Fix tests to work with PHPUnit 3.6.
+
+
+------
+v1.0.4
+------
+
+[jan] Update Latvian translation.
+
+
+------
+v1.0.3
+------
+
+[jan] Update Lithuanian translation.
+
+
+------
+v1.0.2
+------
+
+[jan] Updated Slovak translation.
+
+
+------
+v1.0.1
+------
+
+[jan] Updated Spanish translation.
+
+
+------
+v1.0.0
+------
+
+First stable release for Horde 4.
+
+
+---------
+v1.0.0RC2
+---------
+
+Second release candidate for Horde 4.
+
+
+---------
+v1.0.0RC1
+---------
+
+First release candidate for Horde 4.
+
+
+-----------
+v1.0.0beta1
+-----------
+
+First beta release for Horde 4.
+
+
+------------
+v1.0.0alpha1
+------------
+
+First alpha release for Horde 4.
+
+
+------
+v0.1.0
+------
+
+Initial release, ported from Optik (http://optik.sourceforge.net/)
