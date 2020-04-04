@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2020 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -507,6 +507,8 @@ class Horde_Argv_Parser extends Horde_Argv_OptionContainer
             if (!$option) {
                 if ($this->allowUnknownArgs) {
                     $option = $this->addOption($opt, array('default' => true, 'action' => 'append'));
+                } elseif ($this->ignoreUnknownArgs) {
+                    continue;
                 } else {
                     throw new Horde_Argv_BadOptionException($opt);
                 }
