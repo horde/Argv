@@ -8,7 +8,8 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes:
+  notes: |
+    [rla] Honor ignoreUnknownArgs for short options.
 2.1.0:
   api: 1.1.0
   state:
