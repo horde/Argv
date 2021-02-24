@@ -22,7 +22,7 @@
         }
     ],
     "version": "3.0.0alpha2",
-    "time": "2021-02-23",
+    "time": "2021-02-24",
     "repositories": [
         {
             "type": "composer",
@@ -43,9 +43,6 @@
     "autoload": {
         "psr-0": {
             "Horde_Argv": "lib/"
-        },
-        "psr-4": {
-            "Horde\\Argv\\": "src/"
         }
     }
 }
