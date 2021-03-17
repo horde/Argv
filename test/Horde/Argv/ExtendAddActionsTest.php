@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_Option;
+use \Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,9 +13,9 @@ require_once __DIR__ . '/TestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_ExtendAddActionsTest extends Horde_Argv_TestCase
+class ExtendAddActionsTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $options = array(new Horde_Argv_ExtendAddActionsTest_MyOption("-a", "--apple", array(

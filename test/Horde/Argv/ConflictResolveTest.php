@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/ConflictTestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_IndentedHelpFormatter;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,9 +12,9 @@ require_once __DIR__ . '/ConflictTestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_ConflictResolveTest extends Horde_Argv_ConflictTestCase
+class ConflictResolveTest extends ConflictTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parser->setConflictHandler('resolve');

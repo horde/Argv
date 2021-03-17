@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -14,9 +15,9 @@ require_once __DIR__ . '/TestCase.php';
 /**
  * Conflicting default values: the last one should win.
  */
-class Horde_Argv_ConflictingDefaultsTest extends Horde_Argv_TestCase
+class ConflictingDefaultsTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $options = array(

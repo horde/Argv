@@ -1,6 +1,10 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_IndentedHelpFormatter;
+use \Horde_Cli_Color;
+use \Horde_Argv_OptionGroup;
+use \Horde_Argv_TitledHelpFormatter;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,7 +15,7 @@ require_once __DIR__ . '/TestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_HelpTest extends Horde_Argv_TestCase
+class HelpTest extends TestCase
 {
 
     public static $expected_help_basic = 'Usage: bar.php [options]
@@ -59,7 +63,7 @@ Options:
   -h, --help         show this help message and exit
 ';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parser = $this->makeParser(80);
@@ -69,7 +73,7 @@ Options:
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         putenv('COLUMNS=' . $this->origColumns);
         unset($_SERVER['argv']);
@@ -111,7 +115,7 @@ Options:
 
         putenv('COLUMNS=' . $columns);
 
-        return new Horde_Argv_InterceptingParser(array(
+        return new InterceptingParser(array(
             'optionList' => $options,
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
                 2, 24, null, true,

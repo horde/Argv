@@ -1,6 +1,10 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_Option;
+use \Horde_Argv_Parser;
+use \Horde_Argv_IndentedHelpFormatter;
+use \Horde_Cli_Color;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,9 +15,9 @@ require_once __DIR__ . '/TestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_CallbackTest extends Horde_Argv_TestCase
+class CallbackTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $options = array(

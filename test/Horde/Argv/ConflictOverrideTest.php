@@ -1,6 +1,9 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_Option;
+use \Horde_Argv_IndentedHelpFormatter;
+use \Horde_Cli_Color;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,12 +14,12 @@ require_once __DIR__ . '/TestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_ConflictOverrideTest extends Horde_Argv_TestCase
+class ConflictOverrideTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new Horde_Argv_InterceptingParser(array(
+        $this->parser = new InterceptingParser(array(
             'usage' => Horde_Argv_Option::SUPPRESS_USAGE,
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
                 2, 24, null, true,

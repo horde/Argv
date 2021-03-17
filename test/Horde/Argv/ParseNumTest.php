@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,12 +12,12 @@ require_once __DIR__ . '/TestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_ParseNumTest extends Horde_Argv_TestCase
+class ParseNumTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new Horde_Argv_InterceptingParser();
+        $this->parser = new InterceptingParser();
         $this->parser->addOption('-n', array('type' => 'int'));
         $this->parser->addOption('-l', array('type' => 'long'));
     }

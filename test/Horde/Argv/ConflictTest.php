@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/ConflictTestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_OptionGroup;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,7 +12,7 @@ require_once __DIR__ . '/ConflictTestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_ConflictTest extends Horde_Argv_ConflictTestCase
+class ConflictTest extends ConflictTestCase
 {
     public function assertConflictError($func)
     {
@@ -30,17 +31,20 @@ class Horde_Argv_ConflictTest extends Horde_Argv_ConflictTestCase
 
     public function testConflictError()
     {
+        $this->expectException('Horde_Argv_OptionConflictException');
         $this->assertConflictError(array($this->parser, 'addOption'));
     }
 
     public function testConflictErrorGroup()
     {
+        $this->expectException('Horde_Argv_OptionConflictException');
         $group = new Horde_Argv_OptionGroup($this->parser, 'Group 1');
         $this->assertConflictError(array($group, 'addOption'));
     }
 
     public function testNoSuchConflictHandler()
     {
+        $this->expectException('InvalidArgumentException');
         $this->assertRaises(array($this->parser, 'setConflictHandler'), array('foo'), 'InvalidArgumentException', "invalid conflictHandler 'foo'");
     }
 

@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/TestCase.php';
+namespace Horde\Argv;
+use \Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -11,12 +12,12 @@ require_once __DIR__ . '/TestCase.php';
  * @subpackage UnitTests
  */
 
-class Horde_Argv_MultipleArgsTest extends Horde_Argv_TestCase
+class MultipleArgsTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new Horde_Argv_InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE));
+        $this->parser = new InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE));
         $this->parser->addOption("-p", "--point",
                                  array('action' => "store", 'nargs' => 3, 'type' => "float", 'dest' => "point"));
     }

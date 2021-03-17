@@ -8,7 +8,10 @@
  * @subpackage UnitTests
  */
 
-class Horde_Argv_InterceptedException extends Exception
+namespace Horde\Argv;
+use Exception;
+
+class InterceptedException extends Exception
 {
     public function __construct($error_message = null, $exit_status = null, $exit_message = null)
     {

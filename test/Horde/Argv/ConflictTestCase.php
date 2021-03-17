@@ -7,10 +7,15 @@
  * @package    Argv
  * @subpackage UnitTests
  */
+namespace Horde\Argv;
+use \Horde_Argv_Parser;
+use \Horde_Argv_Option;
+use \Horde_Argv_IndentedHelpFormatter;
+use \Horde_Cli_Color;
 
-class Horde_Argv_ConflictTestCase extends Horde_Argv_TestCase
+class ConflictTestCase extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $options = array(new Horde_Argv_Option('-v', '--verbose', array(
             'action' => 'count',
@@ -18,7 +23,7 @@ class Horde_Argv_ConflictTestCase extends Horde_Argv_TestCase
             'help' => 'increment verbosity'))
         );
 
-        $this->parser = new Horde_Argv_InterceptingParser(array(
+        $this->parser = new InterceptingParser(array(
             'usage' => Horde_Argv_Option::SUPPRESS_USAGE,
             'optionList' => $options,
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
