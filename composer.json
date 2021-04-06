@@ -22,7 +22,7 @@
             "role": "lead"
         }
     ],
-    "time": "2021-03-13",
+    "time": "2021-04-06",
     "repositories": [
         {
             "type": "composer",
@@ -30,11 +30,14 @@
         }
     ],
     "require": {
-        "php": "^7",
+        "php": "^7 || ^8",
         "horde/cli": "^3 || dev-FRAMEWORK_6_0",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/translation": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
+    },
+    "require-dev": {
+        "horde/test": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
         "horde/test": "^3 || dev-FRAMEWORK_6_0"
