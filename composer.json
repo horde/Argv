@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "php": "^7 || ^8",
+        "php": "^7.4 || ^8",
         "horde/cli": "^3 || dev-FRAMEWORK_6_0",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/translation": "^3 || dev-FRAMEWORK_6_0",
