@@ -23,7 +23,7 @@
   <email>mike@maintainable.com</email>
   <active>no</active>
  </lead>
- <date>2021-03-13</date>
+ <date>2022-11-04</date>
  <version>
   <release>3.0.0alpha4</release>
   <api>3.0.0alpha1</api>
@@ -34,10 +34,18 @@
  </stability>
  <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
  <notes>
-* 
+* [rla] Release for PHP 8.
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <dir name=".github">
+    <dir name="workflows">
+     <file name="ci.yml" role="php" />
+     <file name="phpdoc.yml" role="php" />
+     <file name="update-satis.yml" role="php" />
+    </dir> <!-- /.github/workflows -->
+   </dir> <!-- /.github -->
    <dir name="doc">
     <dir name="Horde">
      <dir name="Argv">
@@ -328,6 +336,25 @@
     </dir> <!-- /locale/zh_TW -->
     <file name="Horde_Argv.pot" role="data" />
    </dir> <!-- /locale -->
+   <dir name="src">
+    <file name="AmbiguousOptionException.php" role="php" />
+    <file name="BadOptionException.php" role="php" />
+    <file name="Exception.php" role="php" />
+    <file name="HelpFormatter.php" role="php" />
+    <file name="IndentedHelpFormatter.php" role="php" />
+    <file name="Option.php" role="php" />
+    <file name="OptionConflictException.php" role="php" />
+    <file name="OptionContainer.php" role="php" />
+    <file name="OptionException.php" role="php" />
+    <file name="OptionGroup.php" role="php" />
+    <file name="OptionValueException.php" role="php" />
+    <file name="Parser.php" role="php" />
+    <file name="TitledHelpFormatter.php" role="php" />
+    <file name="Translation.php" role="php">
+     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+    </file>
+    <file name="Values.php" role="php" />
+   </dir> <!-- /src -->
    <dir name="test">
     <dir name="Horde">
      <dir name="Argv">
@@ -351,6 +378,7 @@
       <file name="ExpandDefaultsTest.php" role="test" />
       <file name="ExtendAddActionsTest.php" role="test" />
       <file name="ExtendAddTypesTest.php" role="test" />
+      <file name="ExtendAddTypesTest_MyOption.php" role="test" />
       <file name="HelpTest.php" role="test" />
       <file name="InterceptedException.php" role="test" />
       <file name="InterceptingParser.php" role="test" />
@@ -377,9 +405,9 @@
  <dependencies>
   <required>
    <php>
-    <min>7.0.0</min>
-    <max>8.0.0alpha1</max>
-    <exclude>8.0.0alpha1</exclude>
+    <min>7.4.0</min>
+    <max>9.0.0alpha1</max>
+    <exclude>9.0.0alpha1</exclude>
    </php>
    <pearinstaller>
     <min>1.7.0</min>
@@ -388,6 +416,9 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="workflows/ci.yml" name=".github/workflows/ci.yml" />
+   <install as="workflows/phpdoc.yml" name=".github/workflows/phpdoc.yml" />
+   <install as="workflows/update-satis.yml" name=".github/workflows/update-satis.yml" />
    <install as="ADVANCED.rst" name="doc/Horde/Argv/ADVANCED.rst" />
    <install as="CALLBACKS.rst" name="doc/Horde/Argv/CALLBACKS.rst" />
    <install as="CHANGES" name="doc/Horde/Argv/CHANGES" />
@@ -496,6 +527,21 @@
    <install as="locale/zh_TW/LC_MESSAGES/Horde_Argv.mo" name="locale/zh_TW/LC_MESSAGES/Horde_Argv.mo" />
    <install as="locale/zh_TW/LC_MESSAGES/Horde_Argv.po" name="locale/zh_TW/LC_MESSAGES/Horde_Argv.po" />
    <install as="README.rst" name="README.rst" />
+   <install as="AmbiguousOptionException.php" name="src/AmbiguousOptionException.php" />
+   <install as="BadOptionException.php" name="src/BadOptionException.php" />
+   <install as="Exception.php" name="src/Exception.php" />
+   <install as="HelpFormatter.php" name="src/HelpFormatter.php" />
+   <install as="IndentedHelpFormatter.php" name="src/IndentedHelpFormatter.php" />
+   <install as="Option.php" name="src/Option.php" />
+   <install as="OptionConflictException.php" name="src/OptionConflictException.php" />
+   <install as="OptionContainer.php" name="src/OptionContainer.php" />
+   <install as="OptionException.php" name="src/OptionException.php" />
+   <install as="OptionGroup.php" name="src/OptionGroup.php" />
+   <install as="OptionValueException.php" name="src/OptionValueException.php" />
+   <install as="Parser.php" name="src/Parser.php" />
+   <install as="TitledHelpFormatter.php" name="src/TitledHelpFormatter.php" />
+   <install as="Translation.php" name="src/Translation.php" />
+   <install as="Values.php" name="src/Values.php" />
    <install as="Horde/Argv/AllTests.php" name="test/Horde/Argv/AllTests.php" />
    <install as="Horde/Argv/BoolTest.php" name="test/Horde/Argv/BoolTest.php" />
    <install as="Horde/Argv/bootstrap.php" name="test/Horde/Argv/bootstrap.php" />
@@ -516,6 +562,7 @@
    <install as="Horde/Argv/ExpandDefaultsTest.php" name="test/Horde/Argv/ExpandDefaultsTest.php" />
    <install as="Horde/Argv/ExtendAddActionsTest.php" name="test/Horde/Argv/ExtendAddActionsTest.php" />
    <install as="Horde/Argv/ExtendAddTypesTest.php" name="test/Horde/Argv/ExtendAddTypesTest.php" />
+   <install as="Horde/Argv/ExtendAddTypesTest_MyOption.php" name="test/Horde/Argv/ExtendAddTypesTest_MyOption.php" />
    <install as="Horde/Argv/HelpTest.php" name="test/Horde/Argv/HelpTest.php" />
    <install as="Horde/Argv/InterceptedException.php" name="test/Horde/Argv/InterceptedException.php" />
    <install as="Horde/Argv/InterceptingParser.php" name="test/Horde/Argv/InterceptingParser.php" />
@@ -535,36 +582,6 @@
   </filelist>
  </phprelease>
  <changelog>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
   <release>
    <version>
     <release>0.1.0</release>
@@ -1024,13 +1041,14 @@
     <api>3.0.0alpha1</api>
    </version>
    <stability>
-    <release>alpha</release>
-    <api>alpha</api>
+    <release>stable</release>
+    <api>stable</api>
    </stability>
    <date>2021-03-13</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
-* 
+* [rla] Release for PHP 8.
+* |+
    </notes>
   </release>
  </changelog>
