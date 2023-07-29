@@ -10,7 +10,7 @@ require_once __DIR__ . '/TestCase.php';
  * @package    Argv
  * @subpackage UnitTests
  */
-
+#[\AllowDynamicProperties]
 class Horde_Argv_HelpTest extends Horde_Argv_TestCase
 {
 

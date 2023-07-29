@@ -11,7 +11,7 @@ require_once __DIR__ . '/InterceptingParser.php';
  * @package    Argv
  * @subpackage UnitTests
  */
-
+#[\AllowDynamicProperties]
 class Horde_Argv_CallbackVarArgsTest extends Horde_Argv_TestCase
 {
     public function setUp(): void

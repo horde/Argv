@@ -65,6 +65,7 @@
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
+#[\AllowDynamicProperties]
 abstract class Horde_Argv_HelpFormatter
 {
     const NO_DEFAULT_VALUE = 'none';

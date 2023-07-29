@@ -7,7 +7,7 @@
  * @package    Argv
  * @subpackage UnitTests
  */
-
+#[\AllowDynamicProperties]
 class Horde_Argv_InterceptedException extends Exception
 {
     public function __construct($error_message = null, $exit_status = null, $exit_message = null)

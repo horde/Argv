@@ -25,6 +25,7 @@
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
+#[\AllowDynamicProperties]
 class Horde_Argv_OptionException extends Horde_Argv_Exception
 {
     public function __construct($msg, $option = null)

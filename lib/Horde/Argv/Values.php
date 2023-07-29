@@ -24,6 +24,7 @@
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
+#[\AllowDynamicProperties]
 class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
 {
     public function __construct($defaults = array())

@@ -7,7 +7,7 @@
  * @package    Argv
  * @subpackage UnitTests
  */
-
+#[\AllowDynamicProperties]
 class Horde_Argv_ConflictTestCase extends Horde_Argv_TestCase
 {
     public function setUp(): void

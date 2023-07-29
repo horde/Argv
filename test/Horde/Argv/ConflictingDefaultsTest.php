@@ -14,6 +14,7 @@ require_once __DIR__ . '/TestCase.php';
 /**
  * Conflicting default values: the last one should win.
  */
+#[\AllowDynamicProperties]
 class Horde_Argv_ConflictingDefaultsTest extends Horde_Argv_TestCase
 {
     public function setUp(): void
