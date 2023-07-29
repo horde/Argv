@@ -13,7 +13,7 @@ require_once __DIR__ . '/TestCase.php';
 
 class Horde_Argv_ExtendAddActionsTest extends Horde_Argv_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $options = array(new Horde_Argv_ExtendAddActionsTest_MyOption("-a", "--apple", array(

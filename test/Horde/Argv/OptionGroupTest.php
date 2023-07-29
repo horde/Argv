@@ -13,7 +13,7 @@ require_once __DIR__ . '/TestCase.php';
 
 class Horde_Argv_OptionGroupTest extends Horde_Argv_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parser = new Horde_Argv_Parser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE));

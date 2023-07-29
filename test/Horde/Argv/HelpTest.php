@@ -59,7 +59,7 @@ Options:
   -h, --help         show this help message and exit
 ';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parser = $this->makeParser(80);
@@ -69,7 +69,7 @@ Options:
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         putenv('COLUMNS=' . $this->origColumns);
         unset($_SERVER['argv']);

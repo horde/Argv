@@ -8,14 +8,14 @@
  * @subpackage UnitTests
  */
 
-class Horde_Argv_TestCase extends PHPUnit_Framework_TestCase
+class Horde_Argv_TestCase extends Horde_Test_Case
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         setlocale(LC_ALL, 'C');
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         setlocale(LC_ALL, '');
     }

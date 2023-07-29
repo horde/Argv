@@ -13,7 +13,7 @@ require_once __DIR__ . '/ConflictTestCase.php';
 
 class Horde_Argv_ConflictResolveTest extends Horde_Argv_ConflictTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parser->setConflictHandler('resolve');

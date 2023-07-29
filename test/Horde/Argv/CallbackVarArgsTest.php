@@ -14,7 +14,7 @@ require_once __DIR__ . '/InterceptingParser.php';
 
 class Horde_Argv_CallbackVarArgsTest extends Horde_Argv_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $options = array(

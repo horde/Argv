@@ -13,14 +13,14 @@ require_once __DIR__ . '/TestCase.php';
 
 class Horde_Argv_VersionTest extends Horde_Argv_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (!isset($_SERVER['argv'])) {
             $_SERVER['argv'] = array('test');
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($_SERVER['argv']);
     }

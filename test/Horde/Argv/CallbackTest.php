@@ -13,7 +13,7 @@ require_once __DIR__ . '/TestCase.php';
 
 class Horde_Argv_CallbackTest extends Horde_Argv_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $options = array(

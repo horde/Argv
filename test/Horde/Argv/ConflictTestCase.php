@@ -10,7 +10,7 @@
 
 class Horde_Argv_ConflictTestCase extends Horde_Argv_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $options = array(new Horde_Argv_Option('-v', '--verbose', array(
             'action' => 'count',
