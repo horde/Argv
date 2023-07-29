@@ -42,31 +42,37 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
         return implode(', ', $str);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($attr)
     {
         return isset($this->$attr) && !is_null($this->$attr);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($attr)
     {
         return $this->$attr;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($attr, $val)
     {
         $this->$attr = $val;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($attr)
     {
         unset($this->$attr);
     }
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator(get_object_vars($this));
     }
 
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count(get_object_vars($this));
