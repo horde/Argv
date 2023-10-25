@@ -23,25 +23,12 @@
     ],
     "version": "2.1.1",
     "time": "2017-11-11",
-    "repositories": [
-        {
-            "type": "pear",
-            "url": "https://pear.horde.org"
-        }
-    ],
     "require": {
-        "php": "^5.3 || ^7",
-        "pear-pear.horde.org/Horde_Cli": "^2.2",
-        "pear-pear.horde.org/Horde_Exception": "^2",
-        "pear-pear.horde.org/Horde_Translation": "^2.2",
-        "pear-pear.horde.org/Horde_Util": "^2"
+        "php": "^5.3 || ^7"
     },
     "suggest": {
-        "pear-pear.horde.org/Horde_Test": "^2.1"
     },
     "replace": {
-        "pear-pear.horde.org/Horde_Argv": "2.*",
-        "pear-horde/Horde_Argv": "2.*"
     },
     "autoload": {
         "psr-0": {
