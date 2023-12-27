@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Horde\Argv;
 use Horde\Cli\Color;
 use Horde\Cli\Cli;
+use Horde\Util\HordeString;
 use InvalidArgumentException;
 
 /**
@@ -190,7 +191,7 @@ abstract class HelpFormatter
         }
 
         $default_value = isset($this->parser->defaults[$option->dest]) ? $this->parser->defaults[$option->dest] : null;
-        if ($default_value == Horde_Argv_Option::$NO_DEFAULT || !$default_value) {
+        if ($default_value == Option::$NO_DEFAULT || !$default_value) {
             $default_value = self::NO_DEFAULT_VALUE;
         }
 
@@ -220,7 +221,7 @@ abstract class HelpFormatter
             ? $this->option_strings[(string)$option]
             : null;
         $opt_width = $this->help_position - $this->current_indent - 2;
-        if (strlen($opts) > $opt_width) {
+        if (is_string($opts) && strlen($opts) > $opt_width) {
             $opts = sprintf(
                 '%' . $this->current_indent . "s%s\n",
                 '',
@@ -305,7 +306,7 @@ abstract class HelpFormatter
     public function formatOptionStrings($option)
     {
         if ($option->takesValue()) {
-            $metavar = $option->metavar ? $option->metavar : Horde_String::upper($option->dest);
+            $metavar = $option->metavar ? $option->metavar : HordeString::upper($option->dest);
             $short_opts = array();
             foreach ($option->shortOpts as $sopt) {
                 $short_opts[] = sprintf($this->_short_opt_fmt, $sopt, $metavar);

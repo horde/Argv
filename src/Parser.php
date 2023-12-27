@@ -237,7 +237,7 @@ class Parser extends OptionContainer
         $args = func_get_args();
 
         if (count($args) && is_string($args[0])) {
-            $groupFactory = new ReflectionClass('Horde_Argv_OptionGroup');
+            $groupFactory = new ReflectionClass('OptionGroup');
             array_unshift($args, $this);
             $group = $groupFactory->newInstanceArgs($args);
         } elseif (count($args) == 1) {
@@ -654,7 +654,7 @@ class Parser extends OptionContainer
             $formatter = $this->formatter;
         $formatter->storeOptionStrings($this);
         $result = array();
-        $result[] = $formatter->formatHeading(Horde_Argv_Translation::t("Options"));
+        $result[] = $formatter->formatHeading(Translation::t("Options"));
         $formatter->indent();
         if ($this->optionList) {
             $result[] = parent::formatOptionHelp($formatter);

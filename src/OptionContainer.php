@@ -15,6 +15,8 @@ declare(strict_types=1);
  * @package  Argv
  */
 namespace Horde\Argv;
+
+use Horde_Argv_Option;
 use InvalidArgumentException;
 use ReflectionClass;
 
@@ -44,7 +46,7 @@ use ReflectionClass;
  *      values for each destination [1]
  *
  *  [1] These mappings are common to (shared by) all components of the
- *      controlling Horde_Argv_Parser, where they are initially created.
+ *      controlling Horde\Argv\Parser, where they are initially created.
  *
  * @category  Horde
  * @package   Argv
@@ -79,8 +81,8 @@ class OptionContainer
     }
 
     /**
-     * For use by Horde_Argv_Parser constructor -- create the master
-     * option mappings used by this Horde_Argv_Parser and all
+     * For use by Horde\Argv\Parser constructor -- create the master
+     * option mappings used by this Horde\Argv\Parser and all
      * OptionGroups that it owns.
      */
     protected function _createOptionMappings()
@@ -92,7 +94,7 @@ class OptionContainer
 
     /**
      * For use by OptionGroup constructor -- use shared option
-     * mappings from the Horde_Argv_Parser that owns this OptionGroup.
+     * mappings from the Horde\Argv\Parser that owns this OptionGroup.
      */
     protected function _shareOptionMappings($parser)
     {
@@ -256,7 +258,7 @@ class OptionContainer
             return '';
         $result = array();
         foreach ($this->optionList as $option) {
-            if ($option->help != Horde_Argv_Option::SUPPRESS_HELP)
+            if ($option->help != Option::SUPPRESS_HELP)
                 $result[] = $formatter->formatOption($option);
         }
         return implode('', $result);

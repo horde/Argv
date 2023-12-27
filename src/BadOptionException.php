@@ -25,7 +25,7 @@ namespace Horde\Argv;
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class HBadOptionException extends OptionException
+class BadOptionException extends OptionException
 {
     public function __construct($opt_str)
     {
