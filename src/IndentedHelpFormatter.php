@@ -26,7 +26,7 @@ namespace Horde\Argv;
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class Horde_Argv_IndentedHelpFormatter extends Horde_Argv_HelpFormatter
+class IndentedHelpFormatter extends HelpFormatter
 {
     public function __construct(
         $indent_increment = 2, $max_help_position = 24, $width = null,

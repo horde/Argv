@@ -18,6 +18,7 @@ namespace Horde\Argv;
 use ArrayIterator;
 use ArrayAccess;
 use Countable;
+use IteratorAggregate;
 
 /**
  * Result hash for Horde_Argv_Parser

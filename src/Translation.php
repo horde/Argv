@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @license  http://www.horde.org/licenses/bsd BSD
  */
 namespace Horde\Argv;
-
+use Horde\Translation\Autodetect;
 /**
  * Horde_Argv_Translation is the translation wrapper class for Horde_Argv.
  *
@@ -22,19 +22,19 @@ namespace Horde\Argv;
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class Translation extends Horde_Translation_Autodetect
+class Translation extends Autodetect
 {
     /**
      * The translation domain
      *
      * @var string
      */
-    protected static $_domain = 'Horde_Argv';
+    protected static string $domain = 'Horde_Argv';
 
     /**
      * The absolute PEAR path to the translations for the default gettext handler.
      *
      * @var string
      */
-    protected static $_pearDirectory = '@data_dir@';
+    protected static string $pearDirectory = '@data_dir@';
 }

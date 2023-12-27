@@ -88,7 +88,7 @@ abstract class HelpFormatter
         $this->indent_increment = $indent_increment;
         $this->help_position = $this->max_help_position = $max_help_position;
         if (is_null($width)) {
-            $cli = new Horde\Cli\Cli();
+            $cli = new Cli();
             $width = $cli->getWidth() - 2;
         }
         $this->width = $width;
