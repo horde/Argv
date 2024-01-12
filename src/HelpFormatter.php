@@ -241,7 +241,7 @@ abstract class HelpFormatter
         $result[] = $opts;
         if ($option->help) {
             $help_text = $this->expandDefault($option);
-            $help_lines = explode("\n", wordwrap($help_text, $this->help_width, "\n", true));
+            $help_lines = explode("\n", wordwrap($help_text, (int) $this->help_width, "\n", (bool) $this->help_width));
             $result[] = sprintf(
                 '%' . $indent_first . "s%s\n", '', $help_lines[0]
             );
