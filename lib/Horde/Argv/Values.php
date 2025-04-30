@@ -114,6 +114,7 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
      * @param mixed $attr
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($attr)
     {
         return $this->data[$attr] ?? null;
