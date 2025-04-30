@@ -27,6 +27,8 @@
  */
 class Horde_Argv_OptionException extends Horde_Argv_Exception
 {
+    public string $optionId;
+
     public function __construct($msg, $option = null)
     {
         $this->optionId = (string)$option;

@@ -63,6 +63,7 @@ Options:
   -h, --help         show this help message and exit
 ';
 
+    public $origColumns;
     public function setUp(): void
     {
         parent::setUp();

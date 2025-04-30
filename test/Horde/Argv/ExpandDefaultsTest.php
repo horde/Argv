@@ -16,6 +16,12 @@ use \Horde_Cli_Color;
 
 class ExpandDefaultsTest extends TestCase
 {
+    public $file_help;
+    public $expected_help_file;
+    public $expected_help_none;
+    public $help_prefix;
+    public $default_tag;
+    
     public function setUp(): void
     {
         parent::setUp();

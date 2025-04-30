@@ -14,6 +14,7 @@ use \Horde_Argv_Option;
 
 class CountTest extends TestCase
 {
+    public $vOpt;
     public function setUp(): void
     {
         parent::setUp();

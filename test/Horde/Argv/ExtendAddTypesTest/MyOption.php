@@ -1,7 +1,10 @@
 <?php
 
+namespace Horde\Argv\ExtendAddTypesTest;
 
-class ExtendAddTypesTest_MyOption extends Horde_Argv_Option
+use \Horde_Argv_Option;
+
+class MyOption extends Horde_Argv_Option
 {
     public $TYPES = array('string', 'int', 'long', 'float', 'complex', 'choice', 'file');
 
@@ -16,9 +19,9 @@ class ExtendAddTypesTest_MyOption extends Horde_Argv_Option
     public function checkFile($opt, $value)
     {
         if (!file_exists($value)) {
-            throw new Horde_Argv_OptionValueException(sprintf("%s: file does not exist", $value));
+            throw new \Horde_Argv_OptionValueException(sprintf("%s: file does not exist", $value));
         } elseif (!is_file($value)) {
-            throw new Horde_Argv_OptionValueException(sprintf("%s: not a regular file", $value));
+            throw new \Horde_Argv_OptionValueException(sprintf("%s: not a regular file", $value));
         }
         return $value;
     }

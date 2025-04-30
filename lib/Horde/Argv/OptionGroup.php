@@ -28,6 +28,7 @@
 class Horde_Argv_OptionGroup extends Horde_Argv_OptionContainer
 {
     protected $_title;
+    public $parser;
 
     public function __construct($parser, $title, $description = null)
     {

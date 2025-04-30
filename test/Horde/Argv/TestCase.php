@@ -13,6 +13,8 @@ use \ReflectionClass;
 
 class TestCase extends PHPTestCase
 {
+    public $parser;
+
     public static function setUpBeforeClass(): void
     {
         setlocale(LC_ALL, 'C');
@@ -99,10 +101,10 @@ class TestCase extends PHPTestCase
      */
     public function assertParseFail($cmdline_args, $expected_output)
     {
-        $this->markTestSkipped('Parser undefined. ');
+//        $this->markTestSkipped('Parser undefined. ');
 
         try {
-            $this->parser->parseArgs($cmdline_args);
+            list($options, $positional_args) = $this->parser->parseArgs($cmdline_args);
         } catch (InterceptedException $e) {
             $this->assertEquals($expected_output, (string)$e);
             return true;

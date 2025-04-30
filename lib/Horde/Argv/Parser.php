@@ -81,14 +81,23 @@
  */
 class Horde_Argv_Parser extends Horde_Argv_OptionContainer
 {
-    public $standardOptionList = array();
-
+    public $standardOptionList = [];
     protected $_usage;
-    public $optionGroups = array();
+    public $prog;
+    public $epilog;
+    public $optionGroups = [];
+    public $allowInterspersedArgs;
+    public $ignoreUnknownArgs;
+    public $rargs;
+    public $largs;
+    public $values;
+    public $formatter;
+    public $version;
+    public $allowUnknownArgs;
 
-    public function __construct($args = array())
+    public function __construct($args = [])
     {
-        $args = array_merge(array(
+        $args = array_merge([
             'usage' => null,
             'optionList' => null,
             'optionClass' => 'Horde_Argv_Option',
@@ -102,7 +111,7 @@ class Horde_Argv_Parser extends Horde_Argv_OptionContainer
             'allowInterspersedArgs' => true,
             'allowUnknownArgs' => false,
             'ignoreUnknownArgs' => false,
-            ), $args);
+        ], $args);
 
         parent::__construct($args['optionClass'], $args['conflictHandler'], $args['description']);
         $this->setUsage($args['usage']);
@@ -133,8 +142,8 @@ class Horde_Argv_Parser extends Horde_Argv_OptionContainer
 
     protected function _createOptionList()
     {
-        $this->optionList = array();
-        $this->optionGroups = array();
+        $this->optionList = [];
+        $this->optionGroups = [];
         $this->_createOptionMappings();
     }
 
@@ -165,9 +174,9 @@ class Horde_Argv_Parser extends Horde_Argv_OptionContainer
     protected function _initParsingState()
     {
         // These are set in parseArgs() for the convenience of callbacks.
-        $this->rargs = null;
-        $this->largs = null;
-        $this->values = null;
+        $this->rargs = [];
+        $this->largs = [];
+        $this->values = [];
     }
 
     // -- Simple modifier methods ---------------------------------------
@@ -177,7 +186,7 @@ class Horde_Argv_Parser extends Horde_Argv_OptionContainer
         if (is_null($usage))
             $this->_usage = '%prog ' . Horde_Argv_Translation::t("[options]");
         elseif ($usage == Horde_Argv_Option::SUPPRESS_USAGE)
-            $this->_usage = null;
+            $this->_usage = '';
         else
             $this->_usage = $usage;
     }

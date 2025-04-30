@@ -263,10 +263,21 @@ class Horde_Argv_Option
 
     // -- Constructor/initialization methods ----------------------------
 
-    public $shortOpts = array();
-    public $longOpts = array();
+    public $shortOpts = [];
+    public $longOpts = [];
+
+    public $action;
+    public $type;
     public $dest;
     public $default;
+    public $nargs;
+    public $const;
+    public $choices;
+    public $callback;
+    public $callbackArgs;
+    public $help;
+    public $metavar;
+    public $container; 
 
     /**
      * Constructor.

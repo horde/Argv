@@ -70,6 +70,19 @@ abstract class Horde_Argv_HelpFormatter
     const NO_DEFAULT_VALUE = 'none';
 
     public $parser = null;
+    public $_color;
+    public $indent_increment;
+    public $max_help_position;
+    public $help_position;
+    public $width;
+    public $level;
+    public $current_indent;
+    public $help_width;
+    public $default_tag;
+    public $option_strings;
+    public $_short_opt_fmt;
+    public $_long_opt_fmt;
+    public $short_first;
 
     public function __construct(
         $indent_increment, $max_help_position, $width = null,
@@ -92,7 +105,7 @@ abstract class Horde_Argv_HelpFormatter
         $this->help_width = null; // computed later
         $this->short_first = $short_first;
         $this->default_tag = '%default';
-        $this->option_strings = array();
+        $this->option_strings = [];
         $this->_short_opt_fmt = '%s %s';
         $this->_long_opt_fmt = '%s=%s';
     }

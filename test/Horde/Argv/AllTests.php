@@ -1,5 +1,6 @@
 <?php
-if (!class_exists('Horde_Test_AllTests')) {
-	require_once 'Horde/Test/AllTests.php';
+use Horde\Tests\AllTests;
+
+if (class_exists(AllTests::class)) {
+    Horde\Test\AllTests::init(__FILE__)->run();
 }
-Horde_Test_AllTests::init(__FILE__)->run();

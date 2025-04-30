@@ -15,6 +15,8 @@ use \Horde_Argv_Parser;
 
 class DefaultValuesTest extends TestCase
 {
+    public $expected;
+    
     public function setUp(): void
     {
         parent::setUp();
