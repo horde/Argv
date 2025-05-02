@@ -19,9 +19,12 @@ use ArrayIterator;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+use stdClass;
 
 /**
  * Result hash for Horde_Argv_Parser
+ * 
+ * This is a value object and inherently uses dynamic properties. Do not try to "fix" this.
  *
  * @category  Horde
  * @package   Argv
@@ -30,7 +33,7 @@ use IteratorAggregate;
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class Values implements IteratorAggregate, ArrayAccess, Countable
+class Values extends stdClass implements IteratorAggregate, ArrayAccess, Countable
 {
     public function __construct($defaults = array())
     {
