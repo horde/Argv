@@ -155,6 +155,7 @@ class Option
         'help',
         'metavar',
     );
+    
 
     /**
      * The set of actions allowed by option parsers.  Explicitly listed here so
@@ -267,14 +268,29 @@ class Option
 
     public $shortOpts = array();
     public $longOpts = array();
+    // These should probably be made readonly once we are sure we *really* usually set them through a constructor
+    public $action;
+    public $type;
     public $dest;
     public $default;
+    public $nargs;
+    public $const;
+    public $choices;
+    public $callback;
+    public $callbackArgs;
+    public $help;
+    // TODO: Where is this even used?
+    public $metavar;
+    // Used in OptionContainer->addOption
+    public $container; 
 
     /**
      * Constructor.
      */
     public function __construct()
     {
+        // TODO: Refactor this to use optional constructor properties
+
         // The last argument to this function is an $attrs hash, if it
         // is present and an array. All other arguments are $opts.
         $opts = func_get_args();

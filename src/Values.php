@@ -18,6 +18,7 @@ namespace Horde\Argv;
 use ArrayIterator;
 use ArrayAccess;
 use Countable;
+use Iterator;
 use IteratorAggregate;
 use stdClass;
 
@@ -42,7 +43,7 @@ class Values extends stdClass implements IteratorAggregate, ArrayAccess, Countab
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $str = array();
         foreach ($this as $attr => $val) {
@@ -51,37 +52,37 @@ class Values extends stdClass implements IteratorAggregate, ArrayAccess, Countab
         return implode(', ', $str);
     }
 
-    public function offsetExists($attr)
+    public function offsetExists(mixed $offset): bool
     {
-        return isset($this->$attr) && !is_null($this->$attr);
+        return isset($this->$offset) && !is_null($this->$offset);
     }
 
-    public function offsetGet($attr)
+    public function offsetGet(mixed $offset): mixed
     {
-        return $this->$attr;
+        return $this->$offset;
     }
 
-    public function offsetSet($attr, $val)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
-        $this->$attr = $val;
+        $this->$offset = $value;
     }
 
-    public function offsetUnset($attr)
+    public function offsetUnset(mixed $offset): void
     {
-        unset($this->$attr);
+        unset($this->$offset);
     }
 
-    public function getIterator()
+    public function getIterator(): Iterator
     {
         return new ArrayIterator(get_object_vars($this));
     }
 
-    public function count()
+    public function count(): int
     {
         return count(get_object_vars($this));
     }
 
-    public function ensureValue($attr, $value)
+    public function ensureValue(mixed $attr, mixed $value): mixed
     {
         if (is_null($this->$attr)) {
             $this->$attr = $value;

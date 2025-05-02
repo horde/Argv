@@ -76,6 +76,19 @@ abstract class HelpFormatter
     const NO_DEFAULT_VALUE = 'none';
 
     public $parser = null;
+    public $_color;
+    public $indent_increment;
+    public $max_help_position;
+    public $help_position;
+    public $width;
+    public $level;
+    public $current_indent;
+    public $help_width;
+    public $default_tag;
+    public $option_strings;
+    public $_short_opt_fmt;
+    public $_long_opt_fmt;
+    public $short_first;
 
     public function __construct(
         $indent_increment, $max_help_position, $width = null,
