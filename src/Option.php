@@ -15,6 +15,10 @@ declare(strict_types=1);
  * @package  Argv
  */
 namespace Horde\Argv;
+use Iterator;
+use InvalidArgumentException;
+use RuntimeException;
+
 
 /**
  * Defines the Option class and some standard value-checking functions.
@@ -131,8 +135,8 @@ class Option
                 $choices[] = (string)$choice;
             }
             $choices = "'" . implode("', '", $choices) . "'";
-            throw new Horde_Argv_OptionValueException(sprintf(
-                Horde_Argv_Translation::t("option %s: invalid choice: '%s' (choose from %s)"),
+            throw new OptionValueException(sprintf(
+                Translation::t("option %s: invalid choice: '%s' (choose from %s)"),
                 $opt, $value, $choices));
         }
     }
@@ -339,17 +343,17 @@ class Option
             $opt = (string)$opt;
 
             if (strlen($opt) < 2) {
-                throw new Horde_Argv_OptionException(sprintf("invalid option string '%s': must be at least two characters long", $opt), $this);
+                throw new OptionException(sprintf("invalid option string '%s': must be at least two characters long", $opt), $this);
             } elseif (strlen($opt) == 2) {
                 if (!($opt[0] == '-' && $opt[1] != '-')) {
-                    throw new Horde_Argv_OptionException(sprintf(
+                    throw new OptionException(sprintf(
                         "invalid short option string '%s': " .
                         "must be of the form -x, (x any non-dash char)", $opt), $this);
                 }
                 $this->shortOpts[] = $opt;
             } else {
                 if (!(substr($opt, 0, 2) == '--' && $opt[2] != '-')) {
-                    throw new Horde_Argv_OptionException(sprintf(
+                    throw new OptionException(sprintf(
                         "invalid long option string '%s': " .
                         "must start with --, followed by non-dash", $opt), $this);
                 }
@@ -376,7 +380,7 @@ class Option
         if ($attrs) {
             $attrs = array_keys($attrs);
             sort($attrs);
-            throw new Horde_Argv_OptionException(sprintf(
+            throw new OptionException(sprintf(
                 'invalid keyword arguments: %s', implode(', ', $attrs)), $this);
         }
     }
@@ -389,7 +393,7 @@ class Option
         if (is_null($this->action)) {
             $this->action = 'store';
         } elseif (!in_array($this->action, $this->ACTIONS)) {
-            throw new Horde_Argv_OptionException(sprintf("invalid action: '%s'", $this->action), $this);
+            throw new OptionException(sprintf("invalid action: '%s'", $this->action), $this);
         }
     }
 
@@ -411,11 +415,11 @@ class Option
             }
 
             if (!in_array($this->type, $this->TYPES)) {
-                throw new Horde_Argv_OptionException(sprintf("invalid option type: '%s'", $this->type), $this);
+                throw new OptionException(sprintf("invalid option type: '%s'", $this->type), $this);
             }
 
             if (!in_array($this->action, $this->TYPED_ACTIONS)) {
-                throw new Horde_Argv_OptionException(sprintf(
+                throw new OptionException(sprintf(
                     "must not supply a type for action '%s'", $this->action), $this);
             }
         }
@@ -425,15 +429,15 @@ class Option
     {
         if ($this->type == 'choice') {
             if (is_null($this->choices)) {
-                throw new Horde_Argv_OptionException(
+                throw new OptionException(
                     "must supply a list of choices for type 'choice'", $this);
             } elseif (!(is_array($this->choices) || $this->choices instanceof Iterator)) {
-                throw new Horde_Argv_OptionException(sprintf(
+                throw new OptionException(sprintf(
                     "choices must be a list of strings ('%s' supplied)",
                     gettype($this->choices)), $this);
             }
         } elseif (!is_null($this->choices)) {
-            throw new Horde_Argv_OptionException(sprintf(
+            throw new OptionException(sprintf(
                 "must not supply choices for type '%s'", $this->type), $this);
         }
     }
@@ -459,7 +463,7 @@ class Option
     public function _checkConst()
     {
         if (!in_array($this->action, $this->CONST_ACTIONS) && !is_null($this->const)) {
-            throw new Horde_Argv_OptionException(sprintf(
+            throw new OptionException(sprintf(
                 "'const' must not be supplied for action '%s'", $this->action),
                 $this);
         }
@@ -472,7 +476,7 @@ class Option
                 $this->nargs = 1;
             }
         } elseif (!is_null($this->nargs)) {
-            throw new Horde_Argv_OptionException(sprintf(
+            throw new OptionException(sprintf(
                 "'nargs' must not be supplied for action '%s'", $this->action),
                 $this);
         }
@@ -480,30 +484,38 @@ class Option
 
     public function _checkCallback()
     {
+        // if action is callback, callback must exist and be valid. If not, callback must be null or exist and be valid
         if ($this->action == 'callback') {
+            // Callback must be a callable or an array with object as first item and method name as second item OR a string in format CLASS#method
             if (!is_callable($this->callback)) {
-                $callback_name = is_array($this->callback) ?
-                    is_object($this->callback[0]) ? get_class($this->callback[0] . '#' . $this->callback[1]) : implode('#', $this->callback) :
-                    $this->callback;
-                throw new Horde_Argv_OptionException(sprintf(
-                    "callback not callable: '%s'", $callback_name), $this);
+                $callback_name = '';
+                if (is_array($this->callback)) {
+                    if (is_object($this->callback[0])) {
+                        $callback_name = get_class($this->callback[0]) . '#' .  $this->callback[1];
+                    } else {
+                        $callback_name = implode('#', $this->callback);
+                        }
+                } else {
+                    throw new OptionException(sprintf(
+                        "callback not callable: '%s'", $callback_name), $this);
+                }
             }
             if (!is_null($this->callbackArgs) && !is_array($this->callbackArgs)) {
-                throw new Horde_Argv_OptionException(sprintf(
+                throw new OptionException(sprintf(
                     "callbackArgs, if supplied, must be an array: not '%s'",
                     $this->callbackArgs), $this);
             }
         } else {
             if (!is_null($this->callback)) {
                 $callback_name = is_array($this->callback) ?
-                    is_object($this->callback[0]) ? get_class($this->callback[0] . '#' . $this->callback[1]) : implode('#', $this->callback) :
+                    is_object($this->callback[0]) ? get_class($this->callback[0]) . '#' . $this->callback[1] : implode('#', $this->callback) :
                     $this->callback;
-                throw new Horde_Argv_OptionException(sprintf(
+                throw new OptionException(sprintf(
                     "callback supplied ('%s') for non-callback option",
                     $callback_name), $this);
             }
             if (!is_null($this->callbackArgs)) {
-                throw new Horde_Argv_OptionException(
+                throw new OptionException(
                     'callbackArgs supplied for non-callback option', $this);
             }
         }

@@ -82,7 +82,7 @@ use InvalidArgumentException;
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class Parser extends OptionContainer
+class Parser extends OptionContainer implements ArgvParser
 {
     public $standardOptionList = [];
     protected $_usage;
@@ -478,7 +478,7 @@ class Parser extends OptionContainer
                 throw $e;
             }
         }
-
+        $value = null;
         if ($option->takesValue()) {
             $nargs = $option->nargs;
             if (count($rargs) < $nargs) {

@@ -29,6 +29,7 @@ namespace Horde\Argv;
  */
 class OptionException extends Exception
 {
+    public string $optionId;
     public function __construct($msg, $option = null)
     {
         $this->optionId = (string)$option;

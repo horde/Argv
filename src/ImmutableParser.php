@@ -1,5 +1,5 @@
 <?php
-namespace Horde\Argv\Parser;
+namespace Horde\Argv;
 
 /**
  * An immutable parser can only configured once through its constructor
