@@ -30,8 +30,9 @@ namespace Horde\Argv;
 class OptionGroup extends OptionContainer
 {
     protected $_title;
+    public readonly Parser $parser;
 
-    public function __construct($parser, $title, $description = null)
+    public function __construct(Parser $parser, $title, $description = null)
     {
         $this->parser = $parser;
         parent::__construct($parser->optionClass, $parser->conflictHandler, $description);

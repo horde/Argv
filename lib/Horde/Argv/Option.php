@@ -277,7 +277,7 @@ class Horde_Argv_Option
     public $callbackArgs;
     public $help;
     public $metavar;
-    public $container; 
+    public $container;
 
     /**
      * Constructor.
