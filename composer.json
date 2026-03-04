@@ -44,10 +44,17 @@
             "Horde\\Argv\\": "src/"
         }
     },
-    "autoload-dev": {},
+    "autoload-dev": {
+        "psr-4": {
+            "Horde\\Argv\\": "test/Horde/Argv/",
+            "Horde\\Argv\\Test\\": "test/"
+        }
+    },
     "config": {
         "allow-plugins": {
             "horde/horde-installer-plugin": true
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
