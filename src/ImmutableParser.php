@@ -487,4 +487,16 @@ readonly class ImmutableParser implements ArgvParser
             ->setOptions($this->options)
             ->setGroups($this->groups);
     }
+
+    /**
+     * Format help text.
+     *
+     * @param Modern\Help\HelpFormatter|null $formatter Optional formatter (uses default if null)
+     * @return string Formatted help text
+     */
+    public function formatHelp(?Modern\Help\HelpFormatter $formatter = null): string
+    {
+        $formatter ??= $this->helpFormatter ?? Modern\Help\HelpFormatter::create();
+        return $formatter->format($this->config, $this->options, $this->groups);
+    }
 }
