@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Horde\Argv;
 
-use Horde\Argv\Modern\Config\{ParserConfig, OptionConfig, OptionGroupConfig};
+use Horde\Argv\Modern\Config\{ParserConfig, OptionConfig, OptionGroupConfig, ContextConfig};
 use Horde\Argv\Modern\Result\{ParseResult, OptionValues};
 use Horde\Argv\Modern\Exception\{
     InvalidOptionException,
@@ -51,23 +51,27 @@ readonly class ImmutableParser implements ArgvParser
 {
     private array $optionMap;      // option string => OptionConfig
     private array $optionsByDest;  // dest name => OptionConfig
+    private array $contextMap;     // context name => ContextConfig
 
     /**
      * Construct immutable parser.
      *
      * @param ParserConfig $config Parser configuration
-     * @param array<OptionConfig> $options Options to parse
+     * @param array<OptionConfig> $options Global options (available in all contexts)
      * @param array<OptionGroupConfig> $groups Option groups (for help formatting)
      * @param mixed $helpFormatter Optional help formatter
+     * @param array<ContextConfig> $contexts Available contexts (subcommands)
      */
     public function __construct(
         private ParserConfig $config,
         private array $options = [],
         private array $groups = [],
         private mixed $helpFormatter = null,
+        private array $contexts = [],
     ) {
         $this->optionMap = $this->buildOptionMap();
         $this->optionsByDest = $this->buildDestMap();
+        $this->contextMap = $this->buildContextMap();
         $this->checkConflicts();
     }
 
@@ -455,6 +459,27 @@ readonly class ImmutableParser implements ArgvParser
     }
 
     /**
+     * Build map of context names to context configs.
+     *
+     * @return array<string, ContextConfig> Context map
+     */
+    private function buildContextMap(): array
+    {
+        $map = [];
+
+        foreach ($this->contexts as $context) {
+            // Map primary name
+            $map[$context->name] = $context;
+            // Map all aliases
+            foreach ($context->aliases as $alias) {
+                $map[$alias] = $context;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
      * Check for conflicting options.
      *
      * @throws ConflictingOptionException If conflicts found
@@ -485,7 +510,8 @@ readonly class ImmutableParser implements ArgvParser
         return Modern\Builder\ParserBuilder::create()
             ->fromConfig($this->config)
             ->setOptions($this->options)
-            ->setGroups($this->groups);
+            ->setGroups($this->groups)
+            ->setContexts($this->contexts);
     }
 
     /**
