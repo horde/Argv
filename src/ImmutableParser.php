@@ -854,6 +854,56 @@ readonly class ImmutableParser implements ArgvParser
     public function formatHelp(?Modern\Help\HelpFormatter $formatter = null): string
     {
         $formatter ??= $this->helpFormatter ?? Modern\Help\HelpFormatter::create();
-        return $formatter->format($this->config, $this->options, $this->groups);
+        return $formatter->format($this->config, $this->options, $this->groups, $this->contexts);
+    }
+
+    /**
+     * Format help for a specific context.
+     *
+     * @param string $contextName Context name
+     * @param Modern\Help\HelpFormatter|null $formatter Optional formatter
+     * @return string Formatted context help
+     * @throws \InvalidArgumentException If context not found
+     */
+    public function formatContextHelp(string $contextName, ?Modern\Help\HelpFormatter $formatter = null): string
+    {
+        $context = $this->contextMap[$contextName] ?? null;
+        if ($context === null) {
+            throw new \InvalidArgumentException("Unknown context: {$contextName}");
+        }
+
+        $formatter ??= $this->helpFormatter ?? Modern\Help\HelpFormatter::create();
+        return $formatter->formatContextHelp($this->config, $context, $this->options);
+    }
+
+    /**
+     * Get list of available contexts.
+     *
+     * @return array<ContextConfig> Available contexts
+     */
+    public function getContexts(): array
+    {
+        return $this->contexts;
+    }
+
+    /**
+     * Get a specific context by name.
+     *
+     * @param string $name Context name or alias
+     * @return ContextConfig|null Context or null if not found
+     */
+    public function getContext(string $name): ?ContextConfig
+    {
+        return $this->contextMap[$name] ?? null;
+    }
+
+    /**
+     * Check if parser has contexts.
+     *
+     * @return bool True if contexts are registered
+     */
+    public function hasContexts(): bool
+    {
+        return !empty($this->contexts);
     }
 }

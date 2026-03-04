@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Horde\Argv\Modern\Help;
 
-use Horde\Argv\Modern\Config\{ParserConfig, OptionConfig, OptionGroupConfig};
+use Horde\Argv\Modern\Config\{ParserConfig, OptionConfig, OptionGroupConfig, ContextConfig};
 
 /**
  * Immutable help formatter for Modern API.
@@ -123,12 +123,14 @@ readonly class HelpFormatter
      * @param ParserConfig $config Parser configuration
      * @param array<OptionConfig> $options Options to format
      * @param array<OptionGroupConfig> $groups Option groups
+     * @param array<ContextConfig> $contexts Available contexts
      * @return string Formatted help text
      */
     public function format(
         ParserConfig $config,
         array $options = [],
-        array $groups = []
+        array $groups = [],
+        array $contexts = []
     ): string {
         $parts = [];
 
@@ -140,6 +142,11 @@ readonly class HelpFormatter
         // Description
         if ($config->description !== '' && $config->description !== null) {
             $parts[] = $this->formatDescription($config->description);
+        }
+
+        // Contexts (if any)
+        if (!empty($contexts)) {
+            $parts[] = $this->formatContexts($contexts);
         }
 
         // Options
@@ -164,11 +171,12 @@ readonly class HelpFormatter
      * Format usage line.
      *
      * @param string $usage Usage template
-     * @param string $prog Program name
+     * @param string|null $prog Program name
      * @return string Formatted usage
      */
-    private function formatUsage(string $usage, string $prog): string
+    private function formatUsage(string $usage, ?string $prog): string
     {
+        $prog ??= 'program';
         $usage = str_replace('%prog', $prog, $usage);
         return "Usage: {$usage}\n";
     }
@@ -419,5 +427,154 @@ readonly class HelpFormatter
         }
 
         return $width;
+    }
+
+    /**
+     * Format contexts section.
+     *
+     * @param array<ContextConfig> $contexts Contexts to format
+     * @return string Formatted contexts section
+     */
+    private function formatContexts(array $contexts): string
+    {
+        $lines = ["Commands:"];
+
+        foreach ($contexts as $context) {
+            $lines[] = $this->formatContext($context);
+        }
+
+        return implode("\n", $lines) . "\n";
+    }
+
+    /**
+     * Format a single context.
+     *
+     * @param ContextConfig $context Context to format
+     * @return string Formatted context line
+     */
+    private function formatContext(ContextConfig $context): string
+    {
+        $indent = str_repeat(' ', $this->indent);
+
+        // Format context name with aliases
+        $names = $context->name;
+        if (!empty($context->aliases)) {
+            $names .= ' (' . implode(', ', $context->aliases) . ')';
+        }
+
+        // Pad to max help position
+        $nameWidth = $this->maxHelpPosition - $this->indent;
+        $namePart = str_pad($names, $nameWidth);
+
+        // Description
+        $desc = $context->description;
+        if ($desc === '') {
+            return $indent . $names;
+        }
+
+        // Wrap description if needed
+        $descWidth = $this->getWidth() - $this->maxHelpPosition;
+        if (strlen($desc) > $descWidth) {
+            $desc = wordwrap($desc, $descWidth, "\n" . str_repeat(' ', $this->maxHelpPosition));
+        }
+
+        return $indent . $namePart . $desc;
+    }
+
+    /**
+     * Format help for a specific context.
+     *
+     * Generates help text for a single context, showing context-specific options.
+     *
+     * @param ParserConfig $config Parser configuration
+     * @param ContextConfig $context Context to format
+     * @param array<OptionConfig> $globalOptions Global options
+     * @return string Formatted context help
+     */
+    public function formatContextHelp(
+        ParserConfig $config,
+        ContextConfig $context,
+        array $globalOptions = []
+    ): string {
+        $parts = [];
+
+        // Usage (context-specific if available)
+        $usage = $context->usage !== '' ? $context->usage : $config->usage;
+        if ($usage !== '' && $usage !== null) {
+            $prog = $config->prog ?? 'program';
+            $usage = str_replace('%prog', $prog . ' ' . $context->name, $usage);
+            $parts[] = "Usage: {$usage}\n";
+        }
+
+        // Context description
+        if ($context->description !== '') {
+            $parts[] = $this->formatDescription($context->description);
+        }
+
+        // Context help (detailed)
+        if ($context->help !== '') {
+            $parts[] = $this->wrapText($context->help) . "\n";
+        }
+
+        // Context-specific options
+        if (!empty($context->options)) {
+            $parts[] = "Context Options:";
+            $parts[] = $this->formatOptions($context->options);
+        }
+
+        // Global options (if any)
+        if (!empty($globalOptions)) {
+            $parts[] = "Global Options:";
+            $parts[] = $this->formatOptions($globalOptions);
+        }
+
+        // Argument requirements
+        if ($context->minArgs > 0 || $context->maxArgs < PHP_INT_MAX) {
+            $argInfo = $this->formatArgumentRequirements($context);
+            if ($argInfo !== '') {
+                $parts[] = $argInfo;
+            }
+        }
+
+        return implode("\n", array_filter($parts)) . "\n";
+    }
+
+    /**
+     * Format argument requirements for a context.
+     *
+     * @param ContextConfig $context Context
+     * @return string Formatted argument requirements
+     */
+    private function formatArgumentRequirements(ContextConfig $context): string
+    {
+        $parts = ["Arguments:"];
+        $indent = str_repeat(' ', $this->indent);
+
+        $desc = $context->argsDescription !== '' ? ': ' . $context->argsDescription : '';
+
+        if ($context->minArgs === $context->maxArgs) {
+            $parts[] = $indent . sprintf(
+                "Requires exactly %d argument%s%s",
+                $context->minArgs,
+                $context->minArgs === 1 ? '' : 's',
+                $desc
+            );
+        } elseif ($context->maxArgs === PHP_INT_MAX) {
+            $parts[] = $indent . sprintf(
+                "Requires at least %d argument%s%s",
+                $context->minArgs,
+                $context->minArgs === 1 ? '' : 's',
+                $desc
+            );
+        } else {
+            $parts[] = $indent . sprintf(
+                "Accepts %d-%d arguments%s",
+                $context->minArgs,
+                $context->maxArgs,
+                $desc
+            );
+        }
+
+        return implode("\n", $parts);
     }
 }
