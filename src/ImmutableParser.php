@@ -22,7 +22,9 @@ use Horde\Argv\Modern\Exception\{
     InvalidOptionException,
     AmbiguousOptionException,
     MissingValueException,
-    ConflictingOptionException
+    ConflictingOptionException,
+    UnknownContextException,
+    InvalidArgumentCountException
 };
 use Horde\Argv\Modern\Enum\{OptionAction, ConflictHandler};
 
@@ -78,6 +80,8 @@ readonly class ImmutableParser implements ArgvParser
     /**
      * Parse arguments.
      *
+     * Supports both legacy (no contexts) and modern (with contexts) parsing.
+     *
      * @param array<string>|null $argv Arguments to parse (null = do not use $_SERVER['argv'])
      * @return ParseResult Immutable parse result
      */
@@ -91,6 +95,23 @@ readonly class ImmutableParser implements ArgvParser
             }
         }
 
+        // If no contexts registered, use legacy parsing
+        if (empty($this->contexts)) {
+            return $this->parseLegacy($argv);
+        }
+
+        // Otherwise use context-aware parsing
+        return $this->parseWithContexts($argv);
+    }
+
+    /**
+     * Legacy parsing (no contexts).
+     *
+     * @param array<string> $argv Arguments to parse
+     * @return ParseResult Parse result
+     */
+    private function parseLegacy(array $argv): ParseResult
+    {
         $values = [];
         $args = [];
         $unknown = [];
@@ -143,6 +164,316 @@ readonly class ImmutableParser implements ArgvParser
             arguments: $args,
             unknown: $unknown
         );
+    }
+
+    /**
+     * Context-aware parsing.
+     *
+     * Parse global options, detect context, then parse context-specific options.
+     *
+     * @param array<string> $argv Arguments to parse
+     * @return ParseResult Parse result with context information
+     */
+    private function parseWithContexts(array $argv): ParseResult
+    {
+        $globalValues = [];
+        $contextValues = [];
+        $args = [];
+        $unknown = [];
+        $activeContext = null;
+
+        // Initialize global option defaults
+        foreach ($this->options as $option) {
+            $dest = $this->getDestination($option);
+            if ($option->default !== null) {
+                $globalValues[$dest] = $option->default;
+            }
+        }
+
+        $rargs = $argv;
+        $largs = [];
+        $contextDetected = false;
+
+        // Phase 1: Parse global options and detect context
+        while (!empty($rargs)) {
+            $arg = array_shift($rargs);
+
+            // Check for end of options marker
+            if ($arg === '--') {
+                $largs = array_merge($largs, $rargs);
+                break;
+            }
+
+            // Check if it looks like an option
+            if ($this->isOption($arg)) {
+                // Process as global option
+                $this->processOption($arg, $rargs, $globalValues, $unknown);
+            } else {
+                // First positional arg might be a context
+                if (!$contextDetected && isset($this->contextMap[$arg])) {
+                    $activeContext = $this->contextMap[$arg];
+                    $contextDetected = true;
+
+                    // Initialize context option defaults
+                    foreach ($activeContext->options as $option) {
+                        $dest = $this->getDestination($option);
+                        if ($option->default !== null) {
+                            $contextValues[$dest] = $option->default;
+                        }
+                    }
+
+                    // Phase 2: Parse context-specific options and arguments
+                    while (!empty($rargs)) {
+                        $arg = array_shift($rargs);
+
+                        // Check for end of options marker
+                        if ($arg === '--') {
+                            $largs = array_merge($largs, $rargs);
+                            break;
+                        }
+
+                        // Check if it looks like an option
+                        if ($this->isOption($arg)) {
+                            // Try context option first, fallback to global
+                            if (!$this->processContextOption($arg, $rargs, $contextValues, $activeContext, $unknown)) {
+                                // Not a context option, try global
+                                $this->processOption($arg, $rargs, $globalValues, $unknown);
+                            }
+                        } else {
+                            // Positional argument for context
+                            $largs[] = $arg;
+                        }
+                    }
+                    break;
+                } else {
+                    // Regular positional argument (no context detected)
+                    $largs[] = $arg;
+                }
+            }
+        }
+
+        $args = $largs;
+
+        // Validate argument count if context is active
+        if ($activeContext !== null) {
+            $argCount = count($args);
+            if (!$activeContext->validateArgumentCount($argCount)) {
+                throw new InvalidArgumentCountException(
+                    $activeContext->name,
+                    $argCount,
+                    $activeContext->minArgs,
+                    $activeContext->maxArgs
+                );
+            }
+        }
+
+        // Filter unknown if ignoreUnknownArgs is set
+        if ($this->config->ignoreUnknownArgs) {
+            $unknown = [];
+        }
+
+        // Build result based on whether context was detected
+        if ($activeContext !== null) {
+            return new ParseResult(
+                options: new OptionValues([]), // Not used in context mode
+                arguments: $args,
+                unknown: $unknown,
+                globalOptions: new OptionValues($globalValues),
+                contextOptions: new OptionValues($contextValues),
+                context: $activeContext->name
+            );
+        } else {
+            // No context detected, return as global options
+            return new ParseResult(
+                options: new OptionValues($globalValues),
+                arguments: $args,
+                unknown: $unknown,
+                globalOptions: new OptionValues($globalValues),
+                contextOptions: new OptionValues([]),
+                context: null
+            );
+        }
+    }
+
+    /**
+     * Process a context-specific option.
+     *
+     * @param string $arg Option argument
+     * @param array &$rargs Remaining arguments (by reference)
+     * @param array &$values Context values (by reference)
+     * @param ContextConfig $context Active context
+     * @param array &$unknown Unknown options (by reference)
+     * @return bool True if option was processed, false if not found in context
+     */
+    private function processContextOption(
+        string $arg,
+        array &$rargs,
+        array &$values,
+        ContextConfig $context,
+        array &$unknown
+    ): bool {
+        // Build context option map
+        $contextOptionMap = [];
+        foreach ($context->options as $option) {
+            if ($option->short !== '') {
+                $contextOptionMap[$option->short] = $option;
+            }
+            if ($option->long !== '') {
+                $contextOptionMap[$option->long] = $option;
+            }
+        }
+
+        // Try to find option in context
+        if (str_starts_with($arg, '--')) {
+            return $this->processLongContextOption($arg, $rargs, $values, $contextOptionMap, $unknown);
+        } else {
+            return $this->processShortContextOption($arg, $rargs, $values, $contextOptionMap, $unknown);
+        }
+    }
+
+    /**
+     * Process long context option.
+     *
+     * @param string $arg Long option
+     * @param array &$rargs Remaining arguments
+     * @param array &$values Current values
+     * @param array<string, OptionConfig> $contextOptionMap Context option map
+     * @param array &$unknown Unknown options
+     * @return bool True if processed
+     */
+    private function processLongContextOption(
+        string $arg,
+        array &$rargs,
+        array &$values,
+        array $contextOptionMap,
+        array &$unknown
+    ): bool {
+        // Handle --option=value format
+        $equals_pos = strpos($arg, '=');
+        if ($equals_pos !== false) {
+            $opt = substr($arg, 0, $equals_pos);
+            $value = substr($arg, $equals_pos + 1);
+        } else {
+            $opt = $arg;
+            $value = null;
+        }
+
+        // Find matching option in context
+        $option = $this->findContextOption($opt, $contextOptionMap);
+        if ($option === null) {
+            return false; // Not found in context
+        }
+
+        // Get value if needed
+        if ($option->action->takesValue()) {
+            if ($value === null) {
+                if (empty($rargs)) {
+                    throw new MissingValueException($opt);
+                }
+                $value = array_shift($rargs);
+            }
+
+            // Type conversion and validation
+            $value = $this->convertAndValidate($option, $value);
+        } else {
+            $value = null;
+        }
+
+        // Execute action
+        $this->executeAction($option, $value, $values);
+
+        return true;
+    }
+
+    /**
+     * Process short context option.
+     *
+     * @param string $arg Short option
+     * @param array &$rargs Remaining arguments
+     * @param array &$values Current values
+     * @param array<string, OptionConfig> $contextOptionMap Context option map
+     * @param array &$unknown Unknown options
+     * @return bool True if processed
+     */
+    private function processShortContextOption(
+        string $arg,
+        array &$rargs,
+        array &$values,
+        array $contextOptionMap,
+        array &$unknown
+    ): bool {
+        // Handle -abc bundling
+        $chars = substr($arg, 1);
+
+        foreach (str_split($chars) as $i => $char) {
+            $opt = '-' . $char;
+
+            // Find option in context
+            if (!isset($contextOptionMap[$opt])) {
+                return false; // Not found in context
+            }
+
+            $option = $contextOptionMap[$opt];
+
+            // Get value if needed
+            if ($option->action->takesValue()) {
+                // Check if value is bundled (-ovalue)
+                if ($i < strlen($chars) - 1) {
+                    $value = substr($chars, $i + 1);
+                } elseif (!empty($rargs)) {
+                    $value = array_shift($rargs);
+                } else {
+                    throw new MissingValueException($opt);
+                }
+
+                // Type conversion and validation
+                $value = $this->convertAndValidate($option, $value);
+
+                // Execute action
+                $this->executeAction($option, $value, $values);
+
+                // Stop processing bundled options after taking a value
+                break;
+            } else {
+                // Flag option, continue with bundling
+                $this->executeAction($option, null, $values);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Find option in context option map.
+     *
+     * @param string $opt Option string
+     * @param array<string, OptionConfig> $contextOptionMap Context option map
+     * @return OptionConfig|null Found option or null
+     */
+    private function findContextOption(string $opt, array $contextOptionMap): ?OptionConfig
+    {
+        // Exact match
+        if (isset($contextOptionMap[$opt])) {
+            return $contextOptionMap[$opt];
+        }
+
+        // Partial match for long options
+        if (str_starts_with($opt, '--')) {
+            $matches = [];
+            foreach (array_keys($contextOptionMap) as $key) {
+                if (str_starts_with($key, $opt)) {
+                    $matches[] = $key;
+                }
+            }
+
+            if (count($matches) === 1) {
+                return $contextOptionMap[$matches[0]];
+            } elseif (count($matches) > 1) {
+                throw new AmbiguousOptionException($opt, $matches);
+            }
+        }
+
+        return null;
     }
 
     /**
