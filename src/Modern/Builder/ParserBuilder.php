@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Horde\Argv\Modern\Builder;
 
 use Horde\Argv\ImmutableParser;
-use Horde\Argv\Modern\Config\{ParserConfig, OptionConfig, OptionGroupConfig};
+use Horde\Argv\Modern\Config\{ParserConfig, OptionConfig, OptionGroupConfig, ContextConfig};
 use Horde\Argv\Modern\Enum\ConflictHandler;
 
 /**
@@ -44,6 +44,7 @@ class ParserBuilder
     private ParserConfig $config;
     private array $options = [];
     private array $groups = [];
+    private array $contexts = [];
     private mixed $helpFormatter = null;  // HelpFormatter|null
 
     private function __construct()
@@ -233,6 +234,37 @@ class ParserBuilder
     }
 
     /**
+     * Add a context (subcommand).
+     *
+     * Contexts provide command-specific option sets that don't conflict.
+     * Example: git commit --amend vs git push --force
+     *
+     * @param ContextConfig $context Context to add
+     * @return self New builder instance
+     */
+    public function addContext(ContextConfig $context): self
+    {
+        $new = clone $this;
+        $new->contexts[] = $context;
+        return $new;
+    }
+
+    /**
+     * Add multiple contexts.
+     *
+     * @param array<ContextConfig> $contexts Contexts to add
+     * @return self New builder instance
+     */
+    public function addContexts(array $contexts): self
+    {
+        $new = clone $this;
+        foreach ($contexts as $context) {
+            $new->contexts[] = $context;
+        }
+        return $new;
+    }
+
+    /**
      * Set help formatter (optional, avoids circular dependencies).
      *
      * Note: Formatter can also be provided at parse time to avoid
@@ -259,7 +291,8 @@ class ParserBuilder
             $this->config,
             $this->options,
             $this->groups,
-            $this->helpFormatter
+            $this->helpFormatter,
+            $this->contexts
         );
     }
 
@@ -301,6 +334,19 @@ class ParserBuilder
     {
         $new = clone $this;
         $new->groups = $groups;
+        return $new;
+    }
+
+    /**
+     * Set contexts (internal use for use-and-amend pattern).
+     *
+     * @param array<ContextConfig> $contexts Contexts array
+     * @return self New builder instance
+     */
+    public function setContexts(array $contexts): self
+    {
+        $new = clone $this;
+        $new->contexts = $contexts;
         return $new;
     }
 }
