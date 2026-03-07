@@ -21,7 +21,7 @@
             "role": "lead"
         }
     ],
-    "time": "2025-05-03",
+    "time": "2026-03-07",
     "repositories": [],
     "require": {
         "php": "^8",
@@ -46,15 +46,15 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Horde\\Argv\\": "test/Horde/Argv/",
             "Horde\\Argv\\Test\\": "test/"
         }
     },
     "config": {
-        "allow-plugins": {
-            "horde/horde-installer-plugin": true
-        }
+        "allow-plugins": {}
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "extra": {
+        "branch-alias": {
+            "dev-FRAMEWORK_6_0": "3.x-dev"
+        }
+    }
 }

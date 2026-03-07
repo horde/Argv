@@ -1,4 +1,54 @@
 ---
+3.0.0-alpha8:
+  api: 3.0.0-alpha8
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-07
+  license:
+    identifier: BSD-2-Clause
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: |-
+    chore: modernize code style with PHP 8.2 syntax (#9)
+    feat(argv): implement context help generation (Phase 3)
+    feat(argv): implement context parsing logic (Phase 2)
+    feat(argv): add contextual option groups infrastructure (Phase 1)
+    feat(Modern): implement help formatting system (Week 5)
+    Merge pull request #6 from horde/feat/modern-api-implementation
+    feat(Modern): implement ImmutableParser with full parsing engine (Week 4)
+    feat(Modern): add immutable builders (Week 3)
+    test(modern): add comprehensive unit tests for Weeks 1-2
+    feat(modern): implement Week 2 - Result objects, exceptions, and validators
+    feat(modern): implement Week 1 - Enums and Config objects
+    docs: mark under-development stub classes as internal
+    chore: add test autoload configuration and upgrade guide
+    Merge pull request #5 from horde/tdannhauer_patch1
+    Update composer.json
+3.0.0-alpha7:
+  api: 3.0.0-alpha7
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-07
+  license:
+    identifier: BSD-2-Clause
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: |-
+    chore: modernize code style with PHP 8.2 syntax (#9)
+    feat(argv): implement context help generation (Phase 3)
+    feat(argv): implement context parsing logic (Phase 2)
+    feat(argv): add contextual option groups infrastructure (Phase 1)
+    feat(Modern): implement help formatting system (Week 5)
+    Merge pull request #6 from horde/feat/modern-api-implementation
+    feat(Modern): implement ImmutableParser with full parsing engine (Week 4)
+    feat(Modern): add immutable builders (Week 3)
+    test(modern): add comprehensive unit tests for Weeks 1-2
+    feat(modern): implement Week 2 - Result objects, exceptions, and validators
+    feat(modern): implement Week 1 - Enums and Config objects
+    docs: mark under-development stub classes as internal
+    chore: add test autoload configuration and upgrade guide
+    Merge pull request #5 from horde/tdannhauer_patch1
+    Update composer.json
 3.0.0-alpha6:
   api: 3.0.0-alpha1
   state:
