@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
+
+use Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Option;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class MultipleArgsAppendTest extends TestCase
@@ -17,40 +19,48 @@ class MultipleArgsAppendTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE));
-        $this->parser->addOption("-p", "--point", array(
-            'action' => "store", 'nargs' => 3, 'type' => 'float', 'dest' => 'point'));
-        $this->parser->addOption("-f", "--foo", array(
-            'action' => "append", 'nargs' => 2, 'type' => "int", 'dest' => "foo"));
-        $this->parser->addOption("-z", "--zero", array(
-            'action' => "append_const", 'dest' => "foo", 'const' => array(0, 0)));
+        $this->parser = new InterceptingParser(['usage' => Horde_Argv_Option::SUPPRESS_USAGE]);
+        $this->parser->addOption("-p", "--point", [
+            'action' => "store", 'nargs' => 3, 'type' => 'float', 'dest' => 'point']);
+        $this->parser->addOption("-f", "--foo", [
+            'action' => "append", 'nargs' => 2, 'type' => "int", 'dest' => "foo"]);
+        $this->parser->addOption("-z", "--zero", [
+            'action' => "append_const", 'dest' => "foo", 'const' => [0, 0]]);
     }
 
     public function testNargsAppend()
     {
-        $this->assertParseOK(array("-f", "4", "-3", "blah", "--foo", "1", "666"),
-                             array('point' => null, 'foo' => array(array(4, -3), array(1, 666))),
-                             array('blah'));
+        $this->assertParseOK(
+            ["-f", "4", "-3", "blah", "--foo", "1", "666"],
+            ['point' => null, 'foo' => [[4, -3], [1, 666]]],
+            ['blah']
+        );
     }
 
     public function testNargsAppendRequiredValues()
     {
-        $this->assertParseFail(array("-f4,3"),
-                               "-f option requires 2 arguments");
+        $this->assertParseFail(
+            ["-f4,3"],
+            "-f option requires 2 arguments"
+        );
     }
 
     public function testNargsAppendSimple()
     {
-        $this->assertParseOK(array("--foo=3", "4"),
-                             array('point' => null, 'foo' => array(array(3, 4))),
-                             array());
+        $this->assertParseOK(
+            ["--foo=3", "4"],
+            ['point' => null, 'foo' => [[3, 4]]],
+            []
+        );
     }
 
     public function testNargsAppendConst()
     {
-        $this->assertParseOK(array("--zero", "--foo", "3", "4", "-z"),
-                             array('point' => null, 'foo' => array(array(0, 0), array(3, 4), array(0, 0))),
-                             array());
+        $this->assertParseOK(
+            ["--zero", "--foo", "3", "4", "-z"],
+            ['point' => null, 'foo' => [[0, 0], [3, 4], [0, 0]]],
+            []
+        );
     }
 
 }

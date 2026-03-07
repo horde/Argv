@@ -44,7 +44,7 @@ enum OptionType: string
     public function validate(mixed $value): bool
     {
         return match ($this) {
-            self::Int => is_numeric($value) && (string)(int)$value === (string)$value,
+            self::Int => is_numeric($value) && (string) (int) $value === (string) $value,
             self::Float => is_numeric($value),
             self::String => true,  // All values can be strings
         };
@@ -75,9 +75,9 @@ enum OptionType: string
         }
 
         return match ($this) {
-            self::Int => (int)$value,
-            self::Float => (float)$value,
-            self::String => (string)$value,
+            self::Int => (int) $value,
+            self::Float => (float) $value,
+            self::String => (string) $value,
         };
     }
 

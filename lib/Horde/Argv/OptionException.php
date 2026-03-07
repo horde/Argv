@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -31,7 +32,7 @@ class Horde_Argv_OptionException extends Horde_Argv_Exception
 
     public function __construct($msg, $option = null)
     {
-        $this->optionId = (string)$option;
+        $this->optionId = (string) $option;
         if ($this->optionId) {
             parent::__construct(sprintf('option %s: %s', $this->optionId, $msg));
         } else {

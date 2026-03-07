@@ -1,10 +1,11 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_IndentedHelpFormatter;
-use \Horde_Cli_Color;
-use \Horde_Argv_OptionGroup;
-use \Horde_Argv_TitledHelpFormatter;
+
+use Horde_Argv_IndentedHelpFormatter;
+use Horde_Cli_Color;
+use Horde_Argv_OptionGroup;
+use Horde_Argv_TitledHelpFormatter;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -13,11 +14,11 @@ use \Horde_Argv_TitledHelpFormatter;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class HelpTest extends TestCase
 {
-
     public static $expected_help_basic = 'Usage: bar.php [options]
 
 Options:
@@ -70,7 +71,7 @@ Options:
         $this->parser = $this->makeParser(80);
         $this->origColumns = getenv('COLUMNS');
         if (!isset($_SERVER['argv'])) {
-            $_SERVER['argv'] = array('test');
+            $_SERVER['argv'] = ['test'];
         }
     }
 
@@ -82,47 +83,51 @@ Options:
 
     public function makeParser($columns)
     {
-        $options = array(
+        $options = [
             $this->makeOption(
                 "-a",
-                array(
+                [
                     'type'    => "string",
                     'dest'    => 'a',
                     'metavar' => "APPLE",
-                    'help'    => "throw APPLEs at basket"
-                )
+                    'help'    => "throw APPLEs at basket",
+                ]
             ),
             $this->makeOption(
-                "-b", "--boo",
-                array(
+                "-b",
+                "--boo",
+                [
                     'type'    => "int",
                     'dest'    => 'boo',
                     'metavar' => "NUM",
                     'help'    => "shout \"boo!\" NUM times (in order to frighten away "
-                        . "all the evil spirits that cause trouble and mayhem)"
-                )
+                        . "all the evil spirits that cause trouble and mayhem)",
+                ]
             ),
 
             $this->makeOption(
                 "--foo",
-                array(
+                [
                     'action' => 'append',
                     'type' => 'string',
                     'dest' => 'foo',
-                    'help' => "store FOO in the foo list for later fooing"
-                )
+                    'help' => "store FOO in the foo list for later fooing",
+                ]
             ),
-        );
+        ];
 
         putenv('COLUMNS=' . $columns);
 
-        return new InterceptingParser(array(
+        return new InterceptingParser([
             'optionList' => $options,
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
-                2, 24, null, true,
+                2,
+                24,
+                null,
+                true,
                 new Horde_Cli_Color(Horde_Cli_Color::FORMAT_NONE)
-            )
-        ));
+            ),
+        ]);
     }
 
     public function assertHelpEquals($expectedOutput)
@@ -134,7 +139,7 @@ Options:
 
         $origArgv = $_SERVER['argv'];
         $_SERVER['argv'][0] = 'foo/bar.php';
-        $this->assertOutput(array('-h'), $expectedOutput);
+        $this->assertOutput(['-h'], $expectedOutput);
 
         $_SERVER['argv'] = $origArgv;
     }
@@ -159,7 +164,10 @@ Options:
     public function testHelpTitleFormatter()
     {
         $this->parser->formatter = new Horde_Argv_TitledHelpFormatter(
-            0, 24, null, true,
+            0,
+            24,
+            null,
+            true,
             new Horde_Cli_Color(Horde_Cli_Color::FORMAT_NONE)
         );
         $this->assertHelpEquals(self::$expected_help_title_formatter);
@@ -177,14 +185,17 @@ Options:
     public function testHelpDescriptionGroups()
     {
         $this->parser->setDescription(
-            "This is the program description for %prog.  %prog has " .
-            "an option group as well as single options.");
+            "This is the program description for %prog.  %prog has "
+            . "an option group as well as single options."
+        );
 
         $group = new Horde_Argv_OptionGroup(
-            $this->parser, "Dangerous Options",
-            "Caution: use of these options is at your own risk.  " .
-            "It is believed that some of them bite.");
-        $group->addOption("-g", array('action' => "store_true", 'help' => "Group option."));
+            $this->parser,
+            "Dangerous Options",
+            "Caution: use of these options is at your own risk.  "
+            . "It is believed that some of them bite."
+        );
+        $group->addOption("-g", ['action' => "store_true", 'help' => "Group option."]);
         $this->parser->addOptionGroup($group);
 
         $expect = 'Usage: bar.php [options]

@@ -19,6 +19,7 @@ namespace Horde\Argv\Test\Modern\Result;
 use Horde\Argv\Modern\Result\{ParseResult, OptionValues};
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use ReflectionClass;
 
 #[CoversClass(ParseResult::class)]
 class ParseResultTest extends TestCase
@@ -108,7 +109,7 @@ class ParseResultTest extends TestCase
     {
         $result = new ParseResult(new OptionValues([]), []);
 
-        $reflection = new \ReflectionClass($result);
+        $reflection = new ReflectionClass($result);
         $this->assertTrue($reflection->isReadOnly());
     }
 

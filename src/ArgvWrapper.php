@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Horde\Argv;
 
 use InvalidArgumentException;
@@ -7,6 +9,8 @@ use IteratorAggregate;
 use RuntimeException;
 use Traversable;
 use Countable;
+use ArrayIterator;
+
 /**
  * Wrap a copy of Argv into a simple, typed object for DI
  */
@@ -30,7 +34,7 @@ class ArgvWrapper implements IteratorAggregate, Countable
 
     public function getIterator(): Traversable
     {
-        return new \ArrayIterator($this->argv);
+        return new ArrayIterator($this->argv);
     }
 
     public function count(): int
@@ -40,8 +44,7 @@ class ArgvWrapper implements IteratorAggregate, Countable
 
     public static function fromGlobal()
     {
-        if (empty($GLOBALS['argv']))
-        {
+        if (empty($GLOBALS['argv'])) {
             // Argv always contains at least the binary's name so this indicates a severe error
             throw new RuntimeException("Argv Global is not available or in invalid state");
         }

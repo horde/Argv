@@ -225,7 +225,7 @@ class OptionBuilderTest extends TestCase
     public function testComplexOptionBuilding(): void
     {
         $validator = fn($v) => $v > 0 && $v < 65536;
-        $map = fn($v) => (int)$v;
+        $map = fn($v) => (int) $v;
 
         $config = OptionBuilder::create()
             ->short('-p')

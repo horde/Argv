@@ -19,6 +19,7 @@ namespace Horde\Argv\Test\Modern\Config;
 use Horde\Argv\Modern\Config\{ContextConfig, OptionConfig};
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use InvalidArgumentException;
 
 /**
  * Tests for ContextConfig.
@@ -70,7 +71,7 @@ class ContextConfigTest extends TestCase
 
     public function testEmptyNameThrows(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Context name cannot be empty');
 
         new ContextConfig(name: '');
@@ -78,7 +79,7 @@ class ContextConfigTest extends TestCase
 
     public function testNegativeMinArgsThrows(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('minArgs must be >= 0');
 
         new ContextConfig(name: 'test', minArgs: -1);
@@ -86,7 +87,7 @@ class ContextConfigTest extends TestCase
 
     public function testMaxArgsLessThanMinArgsThrows(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('maxArgs must be >= minArgs');
 
         new ContextConfig(name: 'test', minArgs: 5, maxArgs: 3);
@@ -202,7 +203,7 @@ class ContextConfigTest extends TestCase
 
     public function testNameCannotBeInAliases(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Context name cannot be in aliases list');
 
         new ContextConfig(name: 'deploy', aliases: ['deploy', 'dep']);

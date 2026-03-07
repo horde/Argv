@@ -36,8 +36,7 @@ readonly class OptionValues
      */
     public function __construct(
         private array $values = [],
-    ) {
-    }
+    ) {}
 
     /**
      * Get option value with optional default.

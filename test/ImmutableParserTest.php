@@ -536,7 +536,7 @@ class ImmutableParserTest extends TestCase
             '--port=3000',
             '--format', 'xml',
             'input.txt',
-            'output.txt'
+            'output.txt',
         ]);
 
         $this->assertSame(2, $result->options->get('verbosity'));
@@ -552,7 +552,7 @@ class ImmutableParserTest extends TestCase
 
         $builder = $parser->toBuilder();
 
-        $this->assertInstanceOf(\Horde\Argv\Modern\Builder\ParserBuilder::class, $builder);
+        $this->assertInstanceOf(ParserBuilder::class, $builder);
     }
 
     public function testToBuilderEnablesUseAndAmend(): void

@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Horde\Argv\Modern\Exception;
 
+use Exception;
+
 /**
  * Exception for invalid argument counts in contexts.
  *
@@ -24,7 +26,7 @@ namespace Horde\Argv\Modern\Exception;
  * @category Horde
  * @package  Argv
  */
-class InvalidArgumentCountException extends \Exception
+class InvalidArgumentCountException extends Exception
 {
     /**
      * Constructor.

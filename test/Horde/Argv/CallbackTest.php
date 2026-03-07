@@ -1,10 +1,11 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
-use \Horde_Argv_Parser;
-use \Horde_Argv_IndentedHelpFormatter;
-use \Horde_Cli_Color;
+
+use Horde_Argv_Option;
+use Horde_Argv_Parser;
+use Horde_Argv_IndentedHelpFormatter;
+use Horde_Cli_Color;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -13,6 +14,7 @@ use \Horde_Cli_Color;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class CallbackTest extends TestCase
@@ -20,35 +22,41 @@ class CallbackTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $options = array(
-            new Horde_Argv_Option('-x', null,
-                array('action' => 'callback', 'callback' => array($this, 'processOpt'))),
-            new Horde_Argv_Option('-f', '--file',
-                array('action' => 'callback',
-                      'callback' => array($this, 'processOpt'),
-                      'type' => 'string',
-                      'dest' => 'filename')),
-        );
+        $options = [
+            new Horde_Argv_Option(
+                '-x',
+                null,
+                ['action' => 'callback', 'callback' => [$this, 'processOpt']]
+            ),
+            new Horde_Argv_Option(
+                '-f',
+                '--file',
+                ['action' => 'callback',
+                    'callback' => [$this, 'processOpt'],
+                    'type' => 'string',
+                    'dest' => 'filename']
+            ),
+        ];
 
-        $this->parser = new Horde_Argv_Parser(array('optionList' => $options));
+        $this->parser = new Horde_Argv_Parser(['optionList' => $options]);
     }
 
     public function processOpt($option, $opt, $value, $parser_)
     {
         if ($opt == '-x') {
-            $this->assertEquals(array('-x'), $option->shortOpts);
-            $this->assertEquals(array(), $option->longOpts);
+            $this->assertEquals(['-x'], $option->shortOpts);
+            $this->assertEquals([], $option->longOpts);
             $this->assertInstanceOf(get_class($this->parser), $parser_);
             $this->assertNull($value);
-            $this->assertEquals(array('filename' => null), iterator_to_array($parser_->values));
+            $this->assertEquals(['filename' => null], iterator_to_array($parser_->values));
 
             $parser_->values->x = 42;
-        } else if ($opt == '--file') {
-            $this->assertEquals(array('-f'), $option->shortOpts);
-            $this->assertEquals(array('--file'), $option->longOpts);
+        } elseif ($opt == '--file') {
+            $this->assertEquals(['-f'], $option->shortOpts);
+            $this->assertEquals(['--file'], $option->longOpts);
             $this->assertInstanceOf(get_class($this->parser), $parser_);
             $this->assertEquals('foo', $value);
-            $this->assertEquals(array('filename' => null, 'x' => 42), iterator_to_array($parser_->values));
+            $this->assertEquals(['filename' => null, 'x' => 42], iterator_to_array($parser_->values));
 
             $parser_->values->{$option->dest} = $value;
         } else {
@@ -58,9 +66,11 @@ class CallbackTest extends TestCase
 
     public function testCallback()
     {
-        $this->assertParseOk(array('-x', '--file=foo'),
-                             array('filename' => 'foo', 'x' => 42),
-                             array());
+        $this->assertParseOk(
+            ['-x', '--file=foo'],
+            ['filename' => 'foo', 'x' => 42],
+            []
+        );
     }
 
     public function testCallbackHelp()
@@ -68,29 +78,31 @@ class CallbackTest extends TestCase
         // This test was prompted by SF bug #960515 -- the point is not to
         // inspect the help text, just to make sure that formatHelp() doesn't
         // crash.
-        $parser = new Horde_Argv_Parser(array(
+        $parser = new Horde_Argv_Parser([
             'usage' => Horde_Argv_Option::SUPPRESS_USAGE,
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
-                2, 24, null, true,
+                2,
+                24,
+                null,
+                true,
                 new Horde_Cli_Color(Horde_Cli_Color::FORMAT_NONE)
-            )
-        ));
+            ),
+        ]);
         $parser->removeOption('-h');
         $parser->addOption(
-            '-t', '--test',
-            array(
+            '-t',
+            '--test',
+            [
                 'action' => 'callback',
-                'callback' => array($this, 'returnNull'),
+                'callback' => [$this, 'returnNull'],
                 'type' => 'string',
-                'help' => 'foo'
-            )
+                'help' => 'foo',
+            ]
         );
 
         $expectedHelp = "Options:\n  -t TEST, --test=TEST  foo\n";
         $this->assertHelp($parser, $expectedHelp);
     }
 
-    public function returnNull()
-    {
-    }
+    public function returnNull() {}
 }

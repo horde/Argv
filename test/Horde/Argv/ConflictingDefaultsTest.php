@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -14,32 +15,33 @@ use \Horde_Argv_Parser;
 
 /**
  * Conflicting default values: the last one should win.
+ * @coversNothing
  */
 class ConflictingDefaultsTest extends TestCase
 {
     public function setUp(): void
     {
         parent::setUp();
-        $options = array(
-            $this->makeOption('-v', array('action' => 'store_true', 'dest' => 'verbose', 'default' => 1))
-        );
+        $options = [
+            $this->makeOption('-v', ['action' => 'store_true', 'dest' => 'verbose', 'default' => 1]),
+        ];
 
-        $this->parser = new Horde_Argv_Parser(array('optionList' => $options));
+        $this->parser = new Horde_Argv_Parser(['optionList' => $options]);
     }
 
     public function testConflictDefault()
     {
-        $this->parser->addOption('-q', array('action' => 'store_false', 'dest' => 'verbose',
-                                             'default' => 0));
+        $this->parser->addOption('-q', ['action' => 'store_false', 'dest' => 'verbose',
+            'default' => 0]);
 
-        $this->assertParseOk(array(), array('verbose' => 0), array());
+        $this->assertParseOk([], ['verbose' => 0], []);
     }
 
     public function testConflictDefaultNone()
     {
-        $this->parser->addOption('-q', array('action' => 'store_false', 'dest' => 'verbose',
-                                             'default' => null));
+        $this->parser->addOption('-q', ['action' => 'store_false', 'dest' => 'verbose',
+            'default' => null]);
 
-        $this->assertParseOk(array(), array('verbose' => null), array());
+        $this->assertParseOk([], ['verbose' => null], []);
     }
 }

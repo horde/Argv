@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Horde\Argv\Modern\Exception;
 
 use Throwable;
+use Exception;
 
 /**
  * Ambiguous partial option match exception.
@@ -27,7 +28,7 @@ use Throwable;
  * @category Horde
  * @package  Argv
  */
-class AmbiguousOptionException extends \Exception
+class AmbiguousOptionException extends Exception
 {
     /**
      * Constructor.

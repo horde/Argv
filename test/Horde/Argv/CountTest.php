@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
+
+use Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Option;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class CountTest extends TestCase
@@ -18,86 +20,101 @@ class CountTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE));
-        $this->vOpt = $this->makeOption('-v', array('action' => 'count', 'dest' => 'verbose'));
+        $this->parser = new InterceptingParser(['usage' => Horde_Argv_Option::SUPPRESS_USAGE]);
+        $this->vOpt = $this->makeOption('-v', ['action' => 'count', 'dest' => 'verbose']);
         $this->parser->addOption($this->vOpt);
-        $this->parser->addOption('--verbose', array('type' => 'int', 'dest' => 'verbose'));
-        $this->parser->addOption('-q', '--quiet',
-                                 array('action' => 'store_const', 'dest' => 'verbose', 'const' => 0));
+        $this->parser->addOption('--verbose', ['type' => 'int', 'dest' => 'verbose']);
+        $this->parser->addOption(
+            '-q',
+            '--quiet',
+            ['action' => 'store_const', 'dest' => 'verbose', 'const' => 0]
+        );
     }
 
     public function testEmpty()
     {
-        $this->assertParseOk(array(), array('verbose' => null), array());
+        $this->assertParseOk([], ['verbose' => null], []);
     }
 
     public function testCountOne()
     {
-        $this->assertParseOk(array('-v'), array('verbose' => 1), array());
+        $this->assertParseOk(['-v'], ['verbose' => 1], []);
     }
 
     public function testCountThree()
     {
-        $this->assertParseOk(array('-vvv'), array('verbose' => 3), array());
+        $this->assertParseOk(['-vvv'], ['verbose' => 3], []);
     }
 
     public function testCountThreeApart()
     {
-        $this->assertParseOk(array('-v', '-v', '-v'), array('verbose' => 3), array());
+        $this->assertParseOk(['-v', '-v', '-v'], ['verbose' => 3], []);
     }
 
     public function testCountOverrideAmount()
     {
-        $this->assertParseOk(array('-vvv', '--verbose=2'), array('verbose' => 2), array());
+        $this->assertParseOk(['-vvv', '--verbose=2'], ['verbose' => 2], []);
     }
 
     public function testCountOverrideQuiet()
     {
-        $this->assertParseOk(array('-vvv', '--verbose=2', '-q'), array('verbose' => 0), array());
+        $this->assertParseOk(['-vvv', '--verbose=2', '-q'], ['verbose' => 0], []);
     }
 
     public function testCountOverriding()
     {
-        $this->assertParseOk(array('-vvv', '--verbose=2', '-q', '-v'),
-                             array('verbose' => 1), array());
+        $this->assertParseOk(
+            ['-vvv', '--verbose=2', '-q', '-v'],
+            ['verbose' => 1],
+            []
+        );
     }
 
     public function testCountInterspersedArgs()
     {
-        $this->assertParseOk(array('--quiet', '3', '-v'),
-                             array('verbose' => 1),
-                             array('3'));
+        $this->assertParseOk(
+            ['--quiet', '3', '-v'],
+            ['verbose' => 1],
+            ['3']
+        );
     }
 
     public function testCountNoInterspersedArgs()
     {
         $this->parser->disableInterspersedArgs();
-        $this->assertParseOk(array('--quiet', '3', '-v'),
-                             array('verbose' => 0),
-                             array('3', '-v'));
+        $this->assertParseOk(
+            ['--quiet', '3', '-v'],
+            ['verbose' => 0],
+            ['3', '-v']
+        );
     }
 
     public function testCountNoSuchOption()
     {
-        $this->assertParseFail(array('-q3', '-v'), 'no such option: -3');
+        $this->assertParseFail(['-q3', '-v'], 'no such option: -3');
     }
 
     public function testCountOptionNoValue()
     {
-        $this->assertParseFail(array('--quiet=3', 'v'),
-                               '--quiet option does not take a value');
+        $this->assertParseFail(
+            ['--quiet=3', 'v'],
+            '--quiet option does not take a value'
+        );
     }
 
     public function testCountWithDefault()
     {
         $this->parser->setDefault('verbose', 0);
-        $this->assertParseOk(array(), array('verbose' => 0), array());
+        $this->assertParseOk([], ['verbose' => 0], []);
     }
 
     public function testCountOverridingDefault()
     {
         $this->parser->setDefault('verbose', 0);
-        $this->assertParseOk(array('-vvv', '--verbose=2', '-q', '-v'),
-                             array('verbose' => 1), array());
+        $this->assertParseOk(
+            ['-vvv', '--verbose=2', '-q', '-v'],
+            ['verbose' => 1],
+            []
+        );
     }
 }

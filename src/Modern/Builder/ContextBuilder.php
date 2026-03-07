@@ -69,8 +69,7 @@ class ContextBuilder
         private int $maxArgs = PHP_INT_MAX,
         private string $argsDescription = '',
         private array $subContexts = [],
-    ) {
-    }
+    ) {}
 
     /**
      * Create a new context builder.

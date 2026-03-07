@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
+
+use Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Option;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class CallbackVarArgsTest extends TestCase
@@ -17,25 +19,25 @@ class CallbackVarArgsTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $options = array(
-            $this->makeOption('-a', array('type' => 'int', 'nargs' => 2, 'dest' => 'a')),
-            $this->makeOption('-b', array('action' => 'store_true', 'dest' => 'b')),
-            $this->makeOption('-c', '--callback', array('action' => 'callback', 'callback' => array($this, 'variableArgs'), 'dest' => 'c')),
-        );
-        $this->parser = new InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE,
-                                                                'optionList' => $options));
+        $options = [
+            $this->makeOption('-a', ['type' => 'int', 'nargs' => 2, 'dest' => 'a']),
+            $this->makeOption('-b', ['action' => 'store_true', 'dest' => 'b']),
+            $this->makeOption('-c', '--callback', ['action' => 'callback', 'callback' => [$this, 'variableArgs'], 'dest' => 'c']),
+        ];
+        $this->parser = new InterceptingParser(['usage' => Horde_Argv_Option::SUPPRESS_USAGE,
+            'optionList' => $options]);
     }
 
     public function variableArgs($option, $opt, $value, $parser)
     {
         $this->assertNull($value);
         $done = 0;
-        $value = array();
-        $rargs =& $parser->rargs;
+        $value = [];
+        $rargs = & $parser->rargs;
         while ($rargs) {
             $arg = $rargs[0];
-            if ((substr($arg, 0, 2) == '--' && strlen($arg) > 2) ||
-                (substr($arg, 0, 1) == '-' && strlen($arg) > 1 && substr($arg, 1, 1) != '-')) {
+            if ((substr($arg, 0, 2) == '--' && strlen($arg) > 2)
+                || (substr($arg, 0, 1) == '-' && strlen($arg) > 1 && substr($arg, 1, 1) != '-')) {
                 break;
             } else {
                 $value[] = $arg;
@@ -47,35 +49,43 @@ class CallbackVarArgsTest extends TestCase
 
     public function testVariableArgs()
     {
-        $this->assertParseOK(array('-a3', '-5', '--callback', 'foo', 'bar'),
-                             array('a' => array(3, -5), 'b' => null, 'c' => array('foo', 'bar')),
-                             array());
+        $this->assertParseOK(
+            ['-a3', '-5', '--callback', 'foo', 'bar'],
+            ['a' => [3, -5], 'b' => null, 'c' => ['foo', 'bar']],
+            []
+        );
     }
 
     public function testConsumeSeparatorStopAtOption()
     {
-        $this->assertParseOK(array('-c', '37', '--', 'xxx', '-b', 'hello'),
-                             array('a' => null, 'b' => true, 'c' => array('37', '--', 'xxx')),
-                             array('hello'));
+        $this->assertParseOK(
+            ['-c', '37', '--', 'xxx', '-b', 'hello'],
+            ['a' => null, 'b' => true, 'c' => ['37', '--', 'xxx']],
+            ['hello']
+        );
     }
 
     public function testPositionalArgAndVariableArgs()
     {
-        $this->assertParseOK(array('hello', '-c', 'foo', '-', 'bar'),
-                             array('a' => null, 'b' => null, 'c' => array('foo', '-', 'bar')),
-                             array('hello'));
+        $this->assertParseOK(
+            ['hello', '-c', 'foo', '-', 'bar'],
+            ['a' => null, 'b' => null, 'c' => ['foo', '-', 'bar']],
+            ['hello']
+        );
     }
 
     public function testStopAtOption()
     {
-        $this->assertParseOK(array('-c', 'foo', '-b'),
-                             array('a' => null, 'b' => true, 'c' => array('foo')),
-                             array());
+        $this->assertParseOK(
+            ['-c', 'foo', '-b'],
+            ['a' => null, 'b' => true, 'c' => ['foo']],
+            []
+        );
     }
 
     public function testStopAtInvalidOption()
     {
-        $this->assertParseFail(array('-c', '3', '-5', '-a'), 'no such option: -5');
+        $this->assertParseFail(['-c', '3', '-5', '-a'], 'no such option: -5');
     }
 
 }

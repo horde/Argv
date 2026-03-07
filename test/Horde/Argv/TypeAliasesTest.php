@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Parser;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class TypeAliasesTest extends TestCase
@@ -22,15 +24,15 @@ class TypeAliasesTest extends TestCase
 
     public function testStrAliasesString()
     {
-        $this->parser->addOption("-s", array('type' => "str"));
+        $this->parser->addOption("-s", ['type' => "str"]);
         $this->assertEquals($this->parser->getOption("-s")->type, "string");
     }
 
     public function testNewTypeObject()
     {
-        $this->parser->addOption("-s", array('type' => 'str'));
+        $this->parser->addOption("-s", ['type' => 'str']);
         $this->assertEquals($this->parser->getOption("-s")->type, "string");
-        $this->parser->addOption("-x", array('type' => 'int'));
+        $this->parser->addOption("-x", ['type' => 'int']);
         $this->assertEquals($this->parser->getOption("-x")->type, "int");
     }
 

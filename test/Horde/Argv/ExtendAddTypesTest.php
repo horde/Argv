@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
+
+use Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Option;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class ExtendAddTypesTest extends TestCase
@@ -20,10 +22,10 @@ class ExtendAddTypesTest extends TestCase
     {
         parent::setUp();
         if (class_exists('Horde\\Argv\\ExtendAddTypesTest\\MyOption')) {
-            $this->parser = new InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE,
-                                                                    'optionClass' => 'Horde\\Argv\\ExtendAddTypesTest\\MyOption'));
-            $this->parser->addOption("-a", null, array('type' => "string", 'dest' => "a"));
-            $this->parser->addOption("-f", "--file", array('type' => "file", 'dest' => "file"));
+            $this->parser = new InterceptingParser(['usage' => Horde_Argv_Option::SUPPRESS_USAGE,
+                'optionClass' => 'Horde\\Argv\\ExtendAddTypesTest\\MyOption']);
+            $this->parser->addOption("-a", null, ['type' => "string", 'dest' => "a"]);
+            $this->parser->addOption("-f", "--file", ['type' => "file", 'dest' => "file"]);
         }
 
         /* @todo make more system independent */
@@ -43,9 +45,11 @@ class ExtendAddTypesTest extends TestCase
     {
         if (class_exists('Horde\\Argv\\ExtendAddTypesTest\\MyOption')) {
             touch($this->testPath);
-            $this->assertParseOK(array("--file", $this->testPath, "-afoo"),
-                                array('file' => $this->testPath, 'a' => 'foo'),
-                                array());
+            $this->assertParseOK(
+                ["--file", $this->testPath, "-afoo"],
+                ['file' => $this->testPath, 'a' => 'foo'],
+                []
+            );
         } else {
             $this->markTestSkipped('Class Horde_Argv_ExtendAddTypesTest_MyOption doesnt exist.');
         }
@@ -56,8 +60,10 @@ class ExtendAddTypesTest extends TestCase
     {
         if (class_exists('Horde\\Argv\\ExtendAddTypesTest\\MyOption')) {
             unlink($this->testPath);
-            $this->assertParseFail(array("--file", $this->testPath, "-afoo"),
-                               sprintf("%s: file does not exist", $this->testPath));
+            $this->assertParseFail(
+                ["--file", $this->testPath, "-afoo"],
+                sprintf("%s: file does not exist", $this->testPath)
+            );
         } else {
             $this->markTestSkipped('Class Horde_Argv_ExtendAddTypesTest_MyOption doesnt exist.');
         }
@@ -68,8 +74,10 @@ class ExtendAddTypesTest extends TestCase
         if (class_exists('Horde\\Argv\\ExtendAddTypesTest\\MyOption')) {
             unlink($this->testPath);
             mkdir($this->testPath);
-            $this->assertParseFail(array("--file", $this->testPath, "-afoo"),
-                               sprintf("%s: not a regular file", $this->testPath));
+            $this->assertParseFail(
+                ["--file", $this->testPath, "-afoo"],
+                sprintf("%s: not a regular file", $this->testPath)
+            );
         } else {
             $this->markTestSkipped('Class Horde_Argv_ExtendAddTypesTest_MyOption doesnt exist.');
         }

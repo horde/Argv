@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Argv;
 
 /**
@@ -13,6 +14,4 @@ namespace Horde\Argv;
  * @deprecated This interface is under development and not ready for production use.
  *             The API may change without notice. Do not use in production code.
  */
-interface ArgvParser
-{
-}
+interface ArgvParser {}

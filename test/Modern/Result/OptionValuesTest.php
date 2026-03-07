@@ -19,6 +19,7 @@ namespace Horde\Argv\Test\Modern\Result;
 use Horde\Argv\Modern\Result\OptionValues;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use ReflectionClass;
 
 #[CoversClass(OptionValues::class)]
 class OptionValuesTest extends TestCase
@@ -108,7 +109,7 @@ class OptionValuesTest extends TestCase
     {
         $values = new OptionValues(['test' => 'value']);
 
-        $reflection = new \ReflectionClass($values);
+        $reflection = new ReflectionClass($values);
         $this->assertTrue($reflection->isReadOnly());
     }
 

@@ -22,6 +22,7 @@ use Horde\Argv\Modern\Config\ParserConfig;
 use Horde\Argv\Modern\Enum\ConflictHandler;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use stdClass;
 
 #[CoversClass(ParserBuilder::class)]
 class ParserBuilderTest extends TestCase
@@ -319,7 +320,7 @@ class ParserBuilderTest extends TestCase
 
     public function testWithHelpFormatter(): void
     {
-        $formatter = new \stdClass(); // Placeholder for actual HelpFormatter
+        $formatter = new stdClass(); // Placeholder for actual HelpFormatter
 
         $parser = ParserBuilder::create()
             ->withHelpFormatter($formatter)

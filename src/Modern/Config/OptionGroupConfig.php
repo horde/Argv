@@ -39,6 +39,5 @@ readonly class OptionGroupConfig
         public string $title,
         public string $description = '',
         public array $options = [],
-    ) {
-    }
+    ) {}
 }

@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Horde\Argv\Modern\Exception;
 
 use Throwable;
+use Exception;
 
 /**
  * Conflicting options exception.
@@ -27,7 +28,7 @@ use Throwable;
  * @category Horde
  * @package  Argv
  */
-class ConflictingOptionException extends \Exception
+class ConflictingOptionException extends Exception
 {
     /**
      * Constructor.

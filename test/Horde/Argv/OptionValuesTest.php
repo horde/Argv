@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Values;
+
+use Horde_Argv_Values;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Values;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class OptionValuesTest extends TestCase
@@ -17,15 +19,15 @@ class OptionValuesTest extends TestCase
     public function testBasics()
     {
         $values = new Horde_Argv_Values();
-        $this->assertEquals(array(), iterator_to_array($values));
-        $this->assertNotEquals(array('foo' => 'bar'), $values);
-        $this->assertEquals('', (string)$values);
+        $this->assertEquals([], iterator_to_array($values));
+        $this->assertNotEquals(['foo' => 'bar'], $values);
+        $this->assertEquals('', (string) $values);
 
-        $dict = array('foo' => 'bar', 'baz' => 42);
+        $dict = ['foo' => 'bar', 'baz' => 42];
         $values = new Horde_Argv_Values($dict);
         $this->assertEquals($dict, iterator_to_array($values));
-        $this->assertNotEquals(array('foo' => 'bar'), $values);
-        $this->assertNotEquals(array(), $values);
-        $this->assertNotEquals('', (string)$values);
+        $this->assertNotEquals(['foo' => 'bar'], $values);
+        $this->assertNotEquals([], $values);
+        $this->assertNotEquals('', (string) $values);
     }
 }

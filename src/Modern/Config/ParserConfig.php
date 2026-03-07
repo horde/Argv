@@ -54,8 +54,7 @@ readonly class ParserConfig
         public bool $ignoreUnknownArgs = false,
         public bool $addHelpOption = true,
         public ConflictHandler $conflictHandler = ConflictHandler::Error,
-    ) {
-    }
+    ) {}
 
     /**
      * Create a modified copy with one property changed.

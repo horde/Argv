@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Horde\Argv\Modern\Config;
 
+use InvalidArgumentException;
+
 /**
  * Immutable context configuration.
  *
@@ -66,46 +68,46 @@ readonly class ContextConfig
     /**
      * Validate context configuration.
      *
-     * @throws \InvalidArgumentException If configuration is invalid
+     * @throws InvalidArgumentException If configuration is invalid
      */
     private function validate(): void
     {
         if ($this->name === '') {
-            throw new \InvalidArgumentException('Context name cannot be empty');
+            throw new InvalidArgumentException('Context name cannot be empty');
         }
 
         if ($this->minArgs < 0) {
-            throw new \InvalidArgumentException('minArgs must be >= 0');
+            throw new InvalidArgumentException('minArgs must be >= 0');
         }
 
         if ($this->maxArgs < $this->minArgs) {
-            throw new \InvalidArgumentException('maxArgs must be >= minArgs');
+            throw new InvalidArgumentException('maxArgs must be >= minArgs');
         }
 
         // Validate all options
         foreach ($this->options as $option) {
             if (!$option instanceof OptionConfig) {
-                throw new \InvalidArgumentException('All options must be OptionConfig instances');
+                throw new InvalidArgumentException('All options must be OptionConfig instances');
             }
         }
 
         // Validate all groups
         foreach ($this->groups as $group) {
             if (!$group instanceof OptionGroupConfig) {
-                throw new \InvalidArgumentException('All groups must be OptionGroupConfig instances');
+                throw new InvalidArgumentException('All groups must be OptionGroupConfig instances');
             }
         }
 
         // Validate all sub-contexts
         foreach ($this->subContexts as $subContext) {
             if (!$subContext instanceof ContextConfig) {
-                throw new \InvalidArgumentException('All sub-contexts must be ContextConfig instances');
+                throw new InvalidArgumentException('All sub-contexts must be ContextConfig instances');
             }
         }
 
         // Validate aliases don't conflict with name
         if (in_array($this->name, $this->aliases, true)) {
-            throw new \InvalidArgumentException('Context name cannot be in aliases list');
+            throw new InvalidArgumentException('Context name cannot be in aliases list');
         }
     }
 

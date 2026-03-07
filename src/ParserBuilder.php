@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Argv\Parser;
 
 /**
@@ -20,8 +21,5 @@ namespace Horde\Argv\Parser;
  */
 class ParserBuilder implements Parser
 {
-    public function withArgument(ParserArgument $argument)
-    {
-
-    }
+    public function withArgument(ParserArgument $argument) {}
 }

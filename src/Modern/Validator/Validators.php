@@ -65,7 +65,7 @@ class Validators
     public static function regex(string $pattern, string $description = ''): callable
     {
         return function (mixed $value) use ($pattern, $description): bool|string {
-            if (!preg_match($pattern, (string)$value)) {
+            if (!preg_match($pattern, (string) $value)) {
                 $msg = $description ?: "Value must match pattern {$pattern}";
                 return $msg;
             }
@@ -83,7 +83,7 @@ class Validators
     public static function file(bool $mustExist = true, bool $mustBeReadable = false): callable
     {
         return function (mixed $value) use ($mustExist, $mustBeReadable): bool|string {
-            $path = (string)$value;
+            $path = (string) $value;
 
             if ($mustExist && !file_exists($path)) {
                 return "File not found: {$path}";
@@ -107,7 +107,7 @@ class Validators
     public static function directory(bool $mustExist = true, bool $mustBeWritable = false): callable
     {
         return function (mixed $value) use ($mustExist, $mustBeWritable): bool|string {
-            $path = (string)$value;
+            $path = (string) $value;
 
             if ($mustExist && !is_dir($path)) {
                 return "Directory not found: {$path}";
@@ -147,7 +147,7 @@ class Validators
     public static function minLength(int $length): callable
     {
         return function (mixed $value) use ($length): bool|string {
-            if (strlen((string)$value) < $length) {
+            if (strlen((string) $value) < $length) {
                 return "Value must be at least {$length} characters";
             }
             return true;
@@ -163,7 +163,7 @@ class Validators
     public static function maxLength(int $length): callable
     {
         return function (mixed $value) use ($length): bool|string {
-            if (strlen((string)$value) > $length) {
+            if (strlen((string) $value) > $length) {
                 return "Value must be at most {$length} characters";
             }
             return true;

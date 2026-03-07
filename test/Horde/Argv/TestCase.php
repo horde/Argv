@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -7,10 +8,15 @@
  * @package    Argv
  * @subpackage UnitTests
  */
-namespace Horde\Argv;
-use PHPUnit\Framework\TestCase as PHPTestCase;
-use \ReflectionClass;
 
+namespace Horde\Argv;
+
+use PHPUnit\Framework\TestCase as PHPTestCase;
+use ReflectionClass;
+
+/**
+ * @coversNothing
+ */
 class TestCase extends PHPTestCase
 {
     public $parser;
@@ -46,16 +52,22 @@ class TestCase extends PHPTestCase
      */
     public function assertParseOK($args, $expected_opts, $expected_positional_args)
     {
-        list($options, $positional_args) = $this->parser->parseArgs($args);
+        [$options, $positional_args] = $this->parser->parseArgs($args);
         $optdict = iterator_to_array($options);
 
-        $this->assertEquals($expected_opts, $optdict,
-                            'Expected options don\'t match. Args were ' . print_r($args, true));
+        $this->assertEquals(
+            $expected_opts,
+            $optdict,
+            'Expected options don\'t match. Args were ' . print_r($args, true)
+        );
 
-        $this->assertEquals($positional_args, $expected_positional_args,
-                            'Positional arguments don\'t match. Args were ' . print_r($args, true));
+        $this->assertEquals(
+            $positional_args,
+            $expected_positional_args,
+            'Positional arguments don\'t match. Args were ' . print_r($args, true)
+        );
 
-        return array($options, $positional_args);
+        return [$options, $positional_args];
     }
 
     /**
@@ -72,8 +84,12 @@ class TestCase extends PHPTestCase
      *
      *  Returns the exception raised for further testing.
      */
-    public function assertRaises($func, $args,
-                                 $expected_exception, $expected_message) {
+    public function assertRaises(
+        $func,
+        $args,
+        $expected_exception,
+        $expected_message
+    ) {
         $caught = false;
         try {
             if (is_array($args)) {
@@ -101,12 +117,12 @@ class TestCase extends PHPTestCase
      */
     public function assertParseFail($cmdline_args, $expected_output)
     {
-//        $this->markTestSkipped('Parser undefined. ');
+        //        $this->markTestSkipped('Parser undefined. ');
 
         try {
-            list($options, $positional_args) = $this->parser->parseArgs($cmdline_args);
+            [$options, $positional_args] = $this->parser->parseArgs($cmdline_args);
         } catch (InterceptedException $e) {
-            $this->assertEquals($expected_output, (string)$e);
+            $this->assertEquals($expected_output, (string) $e);
             return true;
         } catch (Exception $e) {
             $this->fail("unexpected Exception: " . $e->getMessage());
@@ -122,8 +138,8 @@ class TestCase extends PHPTestCase
         $cmdline_args,
         $expected_output,
         $expected_status = 0,
-        $expected_error = null)
-    {
+        $expected_error = null
+    ) {
         ob_start();
         try {
             $this->parser->parseArgs($cmdline_args);

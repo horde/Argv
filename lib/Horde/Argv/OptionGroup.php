@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -39,7 +40,7 @@ class Horde_Argv_OptionGroup extends Horde_Argv_OptionContainer
 
     protected function _createOptionList()
     {
-        $this->optionList = array();
+        $this->optionList = [];
         $this->_shareOptionMappings($this->parser);
     }
 
@@ -57,8 +58,9 @@ class Horde_Argv_OptionGroup extends Horde_Argv_OptionContainer
 
     public function formatHelp($formatter = null)
     {
-        if (is_null($formatter))
+        if (is_null($formatter)) {
             return '';
+        }
 
         $result = $formatter->formatHeading($this->_title);
         $formatter->indent();

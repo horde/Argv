@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -14,6 +15,7 @@ declare(strict_types=1);
  * @category Horde
  * @package  Argv
  */
+
 namespace Horde\Argv;
 
 use Horde_Argv_Option;
@@ -58,11 +60,11 @@ use ReflectionClass;
 class OptionContainer
 {
     public $description = '';
-    public $optionList = array();
+    public $optionList = [];
     public $optionClass = Option::class;
-    public $defaults = array();
-    public $shortOpt = array();
-    public $longOpt = array();
+    public $defaults = [];
+    public $shortOpt = [];
+    public $longOpt = [];
     public $conflictHandler;
 
     /**
@@ -87,9 +89,9 @@ class OptionContainer
      */
     protected function _createOptionMappings()
     {
-        $this->shortOpt = array();       // single letter -> Option instance
-        $this->longOpt = array();        // long option -> Option instance
-        $this->defaults = array();       // maps option dest -> default value
+        $this->shortOpt = [];       // single letter -> Option instance
+        $this->longOpt = [];        // long option -> Option instance
+        $this->defaults = [];       // maps option dest -> default value
     }
 
     /**
@@ -98,14 +100,14 @@ class OptionContainer
      */
     protected function _shareOptionMappings($parser)
     {
-        $this->shortOpt =& $parser->shortOpt;
-        $this->longOpt =& $parser->longOpt;
+        $this->shortOpt = & $parser->shortOpt;
+        $this->longOpt = & $parser->longOpt;
         $this->defaults = $parser->defaults;
     }
 
     public function setConflictHandler($handler)
     {
-        if (!in_array($handler, array('error', 'resolve'))) {
+        if (!in_array($handler, ['error', 'resolve'])) {
             throw new InvalidArgumentException('invalid conflictHandler ' . var_export($handler, true));
         }
         $this->conflictHandler = $handler;
@@ -125,7 +127,7 @@ class OptionContainer
 
     protected function _checkConflict($option)
     {
-        $conflictOpts = array();
+        $conflictOpts = [];
         foreach ($option->shortOpts as $opt) {
             if (isset($this->shortOpt[$opt])) {
                 $conflictOpts[$opt] = $this->shortOpt[$opt];
@@ -142,7 +144,8 @@ class OptionContainer
             if ($handler == 'error') {
                 throw new OptionConflictException(sprintf(
                     'conflicting option string(s): %s',
-                    implode(', ', array_keys($conflictOpts))), $option);
+                    implode(', ', array_keys($conflictOpts))
+                ), $option);
             } elseif ($handler == 'resolve') {
                 foreach ($conflictOpts as $opt => $c_option) {
                     if (strncmp($opt, '--', 2) === 0) {
@@ -177,8 +180,9 @@ class OptionContainer
             $option = $optionFactory->newInstanceArgs($opts);
         } elseif (count($opts) == 1) {
             $option = $opts[0];
-            if (!$option instanceof Option)
+            if (!$option instanceof Option) {
                 throw new InvalidArgumentException('not an Option instance: ' . var_export($option, true));
+            }
         } else {
             throw new InvalidArgumentException('invalid arguments');
         }
@@ -254,12 +258,14 @@ class OptionContainer
 
     public function formatOptionHelp($formatter = null)
     {
-        if (!$this->optionList)
+        if (!$this->optionList) {
             return '';
-        $result = array();
+        }
+        $result = [];
         foreach ($this->optionList as $option) {
-            if ($option->help != Option::SUPPRESS_HELP)
+            if ($option->help != Option::SUPPRESS_HELP) {
                 $result[] = $formatter->formatOption($option);
+            }
         }
         return implode('', $result);
     }
@@ -271,11 +277,13 @@ class OptionContainer
 
     public function formatHelp($formatter = null)
     {
-        $result = array();
-        if ($this->description)
+        $result = [];
+        if ($this->description) {
             $result[] = $this->formatDescription($formatter);
-        if ($this->optionList)
+        }
+        if ($this->optionList) {
             $result[] = $this->formatOptionHelp($formatter);
+        }
         return implode("\n", $result);
     }
 

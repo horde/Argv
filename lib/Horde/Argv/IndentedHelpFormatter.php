@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -27,12 +28,18 @@
 class Horde_Argv_IndentedHelpFormatter extends Horde_Argv_HelpFormatter
 {
     public function __construct(
-        $indent_increment = 2, $max_help_position = 24, $width = null,
-        $short_first = true, $color = null
-    )
-    {
+        $indent_increment = 2,
+        $max_help_position = 24,
+        $width = null,
+        $short_first = true,
+        $color = null
+    ) {
         parent::__construct(
-            $indent_increment, $max_help_position, $width, $short_first, $color
+            $indent_increment,
+            $max_help_position,
+            $width,
+            $short_first,
+            $color
         );
     }
 
@@ -48,7 +55,9 @@ class Horde_Argv_IndentedHelpFormatter extends Horde_Argv_HelpFormatter
     public function formatHeading($heading)
     {
         return $this->highlightHeading(sprintf(
-            '%' . $this->current_indent . "s%s:\n", '', $heading
+            '%' . $this->current_indent . "s%s:\n",
+            '',
+            $heading
         ));
     }
 

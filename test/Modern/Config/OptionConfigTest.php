@@ -21,6 +21,7 @@ use Horde\Argv\Modern\Enum\{OptionAction, OptionType};
 use Horde\Argv\Modern\Exception\InvalidOptionException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use ReflectionClass;
 
 #[CoversClass(OptionConfig::class)]
 class OptionConfigTest extends TestCase
@@ -193,7 +194,7 @@ class OptionConfigTest extends TestCase
     {
         $config = new OptionConfig(short: '-v');
 
-        $reflection = new \ReflectionClass($config);
+        $reflection = new ReflectionClass($config);
         $this->assertTrue($reflection->isReadOnly());
     }
 }

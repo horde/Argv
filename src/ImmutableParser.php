@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Horde\Argv;
 
+use InvalidArgumentException;
 use Horde\Argv\Modern\Config\{ParserConfig, OptionConfig, OptionGroupConfig, ContextConfig};
 use Horde\Argv\Modern\Result\{ParseResult, OptionValues};
 use Horde\Argv\Modern\Exception\{
@@ -863,13 +864,13 @@ readonly class ImmutableParser implements ArgvParser
      * @param string $contextName Context name
      * @param Modern\Help\HelpFormatter|null $formatter Optional formatter
      * @return string Formatted context help
-     * @throws \InvalidArgumentException If context not found
+     * @throws InvalidArgumentException If context not found
      */
     public function formatContextHelp(string $contextName, ?Modern\Help\HelpFormatter $formatter = null): string
     {
         $context = $this->contextMap[$contextName] ?? null;
         if ($context === null) {
-            throw new \InvalidArgumentException("Unknown context: {$contextName}");
+            throw new InvalidArgumentException("Unknown context: {$contextName}");
         }
 
         $formatter ??= $this->helpFormatter ?? Modern\Help\HelpFormatter::create();

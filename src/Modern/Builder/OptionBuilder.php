@@ -53,9 +53,7 @@ class OptionBuilder
     private mixed $validator = null;   // callable|null (Principle #3)
     private mixed $map = null;         // callable|null (Principle #3)
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Create new builder instance.

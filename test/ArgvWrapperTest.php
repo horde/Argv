@@ -1,12 +1,17 @@
 <?php
+
 /**
  * @author     Ralf Lang <ralf.lang@ralf-lang.de>
  */
+
 namespace Horde\Argv\Test;
 
 use PHPUnit\Framework\TestCase;
 use Horde\Argv\ArgvWrapper;
 
+/**
+ * @coversNothing
+ */
 class ArgvWrapperTest extends TestCase
 {
     public function testCountArguments()
