@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
+
+use Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Option;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class MultipleArgsTest extends TestCase
@@ -17,35 +19,46 @@ class MultipleArgsTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE));
-        $this->parser->addOption("-p", "--point",
-                                 array('action' => "store", 'nargs' => 3, 'type' => "float", 'dest' => "point"));
+        $this->parser = new InterceptingParser(['usage' => Horde_Argv_Option::SUPPRESS_USAGE]);
+        $this->parser->addOption(
+            "-p",
+            "--point",
+            ['action' => "store", 'nargs' => 3, 'type' => "float", 'dest' => "point"]
+        );
     }
 
     public function testNargsWithPositionalArgs()
     {
-        $this->assertParseOK(array("foo", "-p", "1", "2.5", "-4.3", "xyz"),
-                             array('point' => array(1.0, 2.5, -4.3)),
-                             array('foo', 'xyz'));
+        $this->assertParseOK(
+            ["foo", "-p", "1", "2.5", "-4.3", "xyz"],
+            ['point' => [1.0, 2.5, -4.3]],
+            ['foo', 'xyz']
+        );
     }
 
     public function testNargsLongOpt()
     {
-        $this->assertParseOK(array("--point", "-1", "2.5", "-0", "xyz"),
-                             array('point' => array(-1.0, 2.5, -0.0)),
-                             array("xyz"));
+        $this->assertParseOK(
+            ["--point", "-1", "2.5", "-0", "xyz"],
+            ['point' => [-1.0, 2.5, -0.0]],
+            ["xyz"]
+        );
     }
 
     public function testNargsInvalidFloatValue()
     {
-        $this->assertParseFail(array("-p", "1.0", "2x", "3.5"),
-                               "option -p: invalid floating-point value: '2x'");
+        $this->assertParseFail(
+            ["-p", "1.0", "2x", "3.5"],
+            "option -p: invalid floating-point value: '2x'"
+        );
     }
 
     public function testNargsRequiredValues()
     {
-        $this->assertParseFail(array("--point", "1.0", "3.5"),
-                               "--point option requires 3 arguments");
+        $this->assertParseFail(
+            ["--point", "1.0", "3.5"],
+            "--point option requires 3 arguments"
+        );
     }
 
 }

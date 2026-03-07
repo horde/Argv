@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Horde\Argv\Modern\Exception;
 
+use Exception;
+
 /**
  * Exception for unknown context (subcommand) names.
  *
@@ -24,7 +26,7 @@ namespace Horde\Argv\Modern\Exception;
  * @category Horde
  * @package  Argv
  */
-class UnknownContextException extends \Exception
+class UnknownContextException extends Exception
 {
     /**
      * Constructor.

@@ -50,8 +50,7 @@ readonly class HelpFormatter
         private int $indent = 2,
         private int $maxHelpPosition = 24,
         private bool $shortFirst = true,
-    ) {
-    }
+    ) {}
 
     /**
      * Create formatter with default settings.
@@ -274,7 +273,7 @@ readonly class HelpFormatter
         if ($option->default !== null && !$option->action->isBoolean()) {
             $defaultStr = is_array($option->default)
                 ? '[' . implode(', ', $option->default) . ']'
-                : (string)$option->default;
+                : (string) $option->default;
             $help .= " (default: {$defaultStr})";
         }
 
@@ -422,7 +421,7 @@ readonly class HelpFormatter
             $output = [];
             @exec('tput cols 2>/dev/null', $output);
             if (isset($output[0]) && is_numeric($output[0])) {
-                $width = (int)$output[0];
+                $width = (int) $output[0];
             }
         }
 

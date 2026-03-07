@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you
  * did not receive this file, see http://www.horde.org/licenses/bsd.
@@ -11,8 +12,11 @@ declare(strict_types=1);
  * @category Horde
  * @license  http://www.horde.org/licenses/bsd BSD
  */
+
 namespace Horde\Argv;
+
 use Horde\Translation\Autodetect;
+
 /**
  * Horde_Argv_Translation is the translation wrapper class for Horde_Argv.
  *

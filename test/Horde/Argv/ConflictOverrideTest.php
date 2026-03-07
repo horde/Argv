@@ -1,9 +1,10 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
-use \Horde_Argv_IndentedHelpFormatter;
-use \Horde_Cli_Color;
+
+use Horde_Argv_Option;
+use Horde_Argv_IndentedHelpFormatter;
+use Horde_Cli_Color;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -12,6 +13,7 @@ use \Horde_Cli_Color;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class ConflictOverrideTest extends TestCase
@@ -19,30 +21,35 @@ class ConflictOverrideTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->parser = new InterceptingParser(array(
+        $this->parser = new InterceptingParser([
             'usage' => Horde_Argv_Option::SUPPRESS_USAGE,
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
-                2, 24, null, true,
+                2,
+                24,
+                null,
+                true,
                 new Horde_Cli_Color(Horde_Cli_Color::FORMAT_NONE)
-            )
-        ));
+            ),
+        ]);
         $this->parser->setConflictHandler('resolve');
         $this->parser->addOption(
-            '-n', '--dry-run',
-            array(
+            '-n',
+            '--dry-run',
+            [
                 'action' => 'store_true',
                 'dest' => 'dry_run',
-                'help' => "don't do anything"
-            )
+                'help' => "don't do anything",
+            ]
         );
         $this->parser->addOption(
-            '--dry-run', '-n',
-            array(
+            '--dry-run',
+            '-n',
+            [
                 'action' => 'store_const',
                 'const' => 42,
                 'dest' => 'dry_run',
-                'help' => 'dry run mode'
-            )
+                'help' => 'dry run mode',
+            ]
         );
     }
 
@@ -50,8 +57,8 @@ class ConflictOverrideTest extends TestCase
     {
         $opt = $this->parser->getOption('--dry-run');
 
-        $this->assertEquals(array('-n'), $opt->shortOpts);
-        $this->assertEquals(array('--dry-run'), $opt->longOpts);
+        $this->assertEquals(['-n'], $opt->shortOpts);
+        $this->assertEquals(['--dry-run'], $opt->longOpts);
     }
 
     public function testConflictOverrideHelp()
@@ -59,13 +66,15 @@ class ConflictOverrideTest extends TestCase
         $output = "Options:\n"
                 . "  -h, --help     show this help message and exit\n"
                 . "  -n, --dry-run  dry run mode\n";
-        $this->assertOutput(array('-h'), $output);
+        $this->assertOutput(['-h'], $output);
     }
 
     public function testConflictOverrideArgs()
     {
-        $this->assertParseOk(array('-n'),
-                             array('dry_run' => 42),
-                             array());
+        $this->assertParseOk(
+            ['-n'],
+            ['dry_run' => 42],
+            []
+        );
     }
 }

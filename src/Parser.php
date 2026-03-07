@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 /**
- * Copyright 2010-2020 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -14,9 +15,12 @@ declare(strict_types=1);
  * @category Horde
  * @package  Argv
  */
+
 namespace Horde\Argv;
+
 use ReflectionClass;
 use InvalidArgumentException;
+
 /**
  * Horde command-line argument parsing package.
  *
@@ -98,9 +102,9 @@ class Parser extends OptionContainer implements ArgvParser
     public $version;
     public $allowUnknownArgs;
 
-    public function __construct($args = array())
+    public function __construct($args = [])
     {
-        $args = array_merge(array(
+        $args = array_merge([
             'usage' => null,
             'optionList' => null,
             'optionClass' => Option::class,
@@ -114,7 +118,7 @@ class Parser extends OptionContainer implements ArgvParser
             'allowInterspersedArgs' => true,
             'allowUnknownArgs' => false,
             'ignoreUnknownArgs' => false,
-            ), $args);
+        ], $args);
 
         parent::__construct($args['optionClass'], $args['conflictHandler'], $args['description']);
         $this->setUsage($args['usage']);
@@ -134,8 +138,10 @@ class Parser extends OptionContainer implements ArgvParser
         // standardOptionList class attribute, the 'optionList'
         // argument, and (if applicable) the _addVersionOption() and
         // _addHelpOption() methods.
-        $this->_populateOptionList($args['optionList'],
-                                   $args['addHelpOption']);
+        $this->_populateOptionList(
+            $args['optionList'],
+            $args['addHelpOption']
+        );
 
         $this->_initParsingState();
     }
@@ -145,33 +151,37 @@ class Parser extends OptionContainer implements ArgvParser
 
     protected function _createOptionList()
     {
-        $this->optionList = array();
-        $this->optionGroups = array();
+        $this->optionList = [];
+        $this->optionGroups = [];
         $this->_createOptionMappings();
     }
 
     protected function _addHelpOption()
     {
-        $this->addOption('-h', '--help', array('action' => 'help',
-                                               'help' => Translation::t("show this help message and exit")));
+        $this->addOption('-h', '--help', ['action' => 'help',
+            'help' => Translation::t("show this help message and exit")]);
     }
 
     protected function _addVersionOption()
     {
-        $this->addOption('--version', array('action' => 'version',
-                                            'help' => Translation::t("show program's version number and exit")));
+        $this->addOption('--version', ['action' => 'version',
+            'help' => Translation::t("show program's version number and exit")]);
     }
 
     protected function _populateOptionList($optionList, $add_help = true)
     {
-        if ($this->standardOptionList)
+        if ($this->standardOptionList) {
             $this->addOptions($this->standardOptionList);
-        if ($optionList)
+        }
+        if ($optionList) {
             $this->addOptions($optionList);
-        if ($this->version)
+        }
+        if ($this->version) {
             $this->_addVersionOption();
-        if ($add_help)
+        }
+        if ($add_help) {
             $this->_addHelpOption();
+        }
     }
 
     protected function _initParsingState()
@@ -186,12 +196,13 @@ class Parser extends OptionContainer implements ArgvParser
 
     public function setUsage($usage)
     {
-        if (is_null($usage))
+        if (is_null($usage)) {
             $this->_usage = '%prog ' . Translation::t("[options]");
-        elseif ($usage == Option::SUPPRESS_USAGE)
+        } elseif ($usage == Option::SUPPRESS_USAGE) {
             $this->_usage = null;
-        else
+        } else {
             $this->_usage = $usage;
+        }
     }
 
     public function enableInterspersedArgs()
@@ -227,7 +238,7 @@ class Parser extends OptionContainer implements ArgvParser
     {
         $defaults = $this->defaults;
         foreach ($this->_getAllOptions() as $option) {
-            $default = isset($defaults[$option->dest]) ? $defaults[$option->dest] : null;
+            $default = $defaults[$option->dest] ?? null;
             if (is_string($default)) {
                 $opt_str = $option->getOptString();
                 $defaults[$option->dest] = $option->checkValue($opt_str, $default);
@@ -251,10 +262,12 @@ class Parser extends OptionContainer implements ArgvParser
             $group = $groupFactory->newInstanceArgs($args);
         } elseif (count($args) == 1) {
             $group = $args[0];
-            if (!$group instanceof OptionGroup)
+            if (!$group instanceof OptionGroup) {
                 throw new InvalidArgumentException("not an OptionGroup instance: " . var_export($group, true));
-            if ($group->parser !== $this)
+            }
+            if ($group->parser !== $this) {
                 throw new InvalidArgumentException("invalid OptionGroup (wrong parser)");
+            }
         } else {
             throw new InvalidArgumentException('invalid arguments');
         }
@@ -306,9 +319,10 @@ class Parser extends OptionContainer implements ArgvParser
     public function parseArgs($args = null, $values = null)
     {
         $rargs = $this->_getArgs($args);
-        $largs = array();
-        if (is_null($values))
+        $largs = [];
+        if (is_null($values)) {
             $values = $this->getDefaultValues();
+        }
 
         // Store the halves of the argument list as attributes for the
         // convenience of callbacks:
@@ -319,8 +333,8 @@ class Parser extends OptionContainer implements ArgvParser
         //     the leftover arguments -- ie. what's left after removing
         //     options and their arguments (the "l" stands for "leftover"
         //     or "left-hand")
-        $this->rargs =& $rargs;
-        $this->largs =& $largs;
+        $this->rargs = & $rargs;
+        $this->largs = & $largs;
         $this->values = $values;
 
         try {
@@ -344,7 +358,7 @@ class Parser extends OptionContainer implements ArgvParser
      */
     public function checkValues($values, $args)
     {
-        return array($values, $args);
+        return [$values, $args];
     }
 
     /**
@@ -431,7 +445,7 @@ class Parser extends OptionContainer implements ArgvParser
         }
 
         // Isolate all words with s as a prefix.
-        $possibilities = array();
+        $possibilities = [];
         foreach (array_keys($wordmap) as $word) {
             if (strncmp($word, $s, strlen($s)) === 0) {
                 $possibilities[] = $word;
@@ -457,7 +471,7 @@ class Parser extends OptionContainer implements ArgvParser
         // Value explicitly attached to arg?  Pretend it's the next
         // argument.
         if (strpos($arg, '=') !== false) {
-            list($opt, $next_arg) = explode('=', $arg, 2);
+            [$opt, $next_arg] = explode('=', $arg, 2);
             array_unshift($rargs, $next_arg);
             $had_explicit_value = true;
         } else {
@@ -473,7 +487,7 @@ class Parser extends OptionContainer implements ArgvParser
                 return;
             }
             if ($this->allowUnknownArgs) {
-                $option = $this->addOption($opt, array('default' => true, 'action' => 'append'));
+                $option = $this->addOption($opt, ['default' => true, 'action' => 'append']);
             } else {
                 throw $e;
             }
@@ -513,12 +527,12 @@ class Parser extends OptionContainer implements ArgvParser
         for ($c = 1, $c_max = strlen($arg); $c < $c_max; $c++) {
             $ch = $arg[$c];
             $opt = '-' . $ch;
-            $option = isset($this->shortOpt[$opt]) ? $this->shortOpt[$opt] : null;
+            $option = $this->shortOpt[$opt] ?? null;
             $i++; // we have consumed a character
 
             if (!$option) {
                 if ($this->allowUnknownArgs) {
-                    $option = $this->addOption($opt, array('default' => true, 'action' => 'append'));
+                    $option = $this->addOption($opt, ['default' => true, 'action' => 'append']);
                 } elseif ($this->ignoreUnknownArgs) {
                     continue;
                 } else {
@@ -556,7 +570,9 @@ class Parser extends OptionContainer implements ArgvParser
 
             $option->process($opt, $value, $values, $this);
 
-            if ($stop) { break; }
+            if ($stop) {
+                break;
+            }
         }
     }
 
@@ -564,10 +580,11 @@ class Parser extends OptionContainer implements ArgvParser
 
     public function getProgName()
     {
-        if (is_null($this->prog))
+        if (is_null($this->prog)) {
             return basename($_SERVER['argv'][0]);
-        else
+        } else {
             return $this->prog;
+        }
     }
 
     public function expandProgName($s)
@@ -582,8 +599,9 @@ class Parser extends OptionContainer implements ArgvParser
 
     public function parserExit($status = 0, $msg = null)
     {
-        if ($msg)
+        if ($msg) {
             fwrite(STDERR, $msg);
+        }
         exit($status);
     }
 
@@ -602,12 +620,14 @@ class Parser extends OptionContainer implements ArgvParser
 
     public function getUsage($formatter = null)
     {
-        if (is_null($formatter))
+        if (is_null($formatter)) {
             $formatter = $this->formatter;
-        if ($this->_usage)
+        }
+        if ($this->_usage) {
             return $formatter->formatUsage($this->expandProgName($this->_usage));
-        else
+        } else {
             return '';
+        }
     }
 
     /**
@@ -621,21 +641,24 @@ class Parser extends OptionContainer implements ArgvParser
      */
     public function printUsage($file = null)
     {
-        if (!$this->_usage)
+        if (!$this->_usage) {
             return;
+        }
 
-        if (is_null($file))
+        if (is_null($file)) {
             echo $this->getUsage();
-        else
+        } else {
             fwrite($file, $this->getUsage());
+        }
     }
 
     public function getVersion()
     {
-        if ($this->version)
+        if ($this->version) {
             return $this->expandProgName($this->version);
-        else
+        } else {
             return '';
+        }
     }
 
     /**
@@ -648,21 +671,24 @@ class Parser extends OptionContainer implements ArgvParser
      */
     public function printVersion($file = null)
     {
-        if (!$this->version)
+        if (!$this->version) {
             return;
+        }
 
-        if (is_null($file))
+        if (is_null($file)) {
             echo $this->getVersion() . "\n";
-        else
+        } else {
             fwrite($file, $this->getVersion() . "\n");
+        }
     }
 
     public function formatOptionHelp($formatter = null)
     {
-        if (is_null($formatter))
+        if (is_null($formatter)) {
             $formatter = $this->formatter;
+        }
         $formatter->storeOptionStrings($this);
-        $result = array();
+        $result = [];
         $result[] = $formatter->formatHeading(Translation::t("Options"));
         $formatter->indent();
         if ($this->optionList) {
@@ -686,13 +712,16 @@ class Parser extends OptionContainer implements ArgvParser
 
     public function formatHelp($formatter = null)
     {
-        if (is_null($formatter))
+        if (is_null($formatter)) {
             $formatter = $this->formatter;
-        $result = array();
-        if ($this->_usage)
+        }
+        $result = [];
+        if ($this->_usage) {
             $result[] = $this->getUsage($formatter) . "\n";
-        if ($this->description)
+        }
+        if ($this->description) {
             $result[] = $this->formatDescription($formatter) . "\n";
+        }
         $result[] = $this->formatOptionHelp($formatter);
         $result[] = $this->formatEpilog($formatter);
         return implode('', $result);
@@ -706,10 +735,11 @@ class Parser extends OptionContainer implements ArgvParser
      */
     public function printHelp($file = null)
     {
-        if (is_null($file))
+        if (is_null($file)) {
             echo $this->formatHelp();
-        else
+        } else {
             fwrite($file, $this->formatHelp());
+        }
     }
 
 }

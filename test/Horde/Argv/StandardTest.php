@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
+
+use Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Option;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class StandardTest extends TestCase
@@ -17,121 +19,152 @@ class StandardTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $options = array(
-            $this->makeOption('-a', array('type' => 'string')),
-            $this->makeOption('-b', '--boo', array('type' => 'int', 'dest' => 'boo')),
-            $this->makeOption('--foo', array('action' => 'append'))
-        );
+        $options = [
+            $this->makeOption('-a', ['type' => 'string']),
+            $this->makeOption('-b', '--boo', ['type' => 'int', 'dest' => 'boo']),
+            $this->makeOption('--foo', ['action' => 'append']),
+        ];
 
-        $this->parser = new InterceptingParser(array('usage' => Horde_Argv_Option::SUPPRESS_USAGE,
-                                                                'optionList' => $options));
+        $this->parser = new InterceptingParser(['usage' => Horde_Argv_Option::SUPPRESS_USAGE,
+            'optionList' => $options]);
     }
 
     public function testRequiredValue()
     {
-        $this->assertParseFail(array('-a'),
-                               '-a option requires an argument');
+        $this->assertParseFail(
+            ['-a'],
+            '-a option requires an argument'
+        );
     }
 
     public function testInvalidInteger()
     {
-        $this->assertParseFail(array('-b', '5x'),
-                               "option -b: invalid integer value: '5x'");
+        $this->assertParseFail(
+            ['-b', '5x'],
+            "option -b: invalid integer value: '5x'"
+        );
     }
 
     public function testNoSuchOption()
     {
-        $this->assertParseFail(array('--boo13'),
-                               "no such option: --boo13");
+        $this->assertParseFail(
+            ['--boo13'],
+            "no such option: --boo13"
+        );
     }
 
     public function testLongInvalidInteger()
     {
-        $this->assertParseFail(array("--boo=x5"),
-                               "option --boo: invalid integer value: 'x5'");
+        $this->assertParseFail(
+            ["--boo=x5"],
+            "option --boo: invalid integer value: 'x5'"
+        );
     }
 
     public function testEmpty()
     {
-        $this->assertParseOk(array(),
-                             array('a' => null, 'boo' => null, 'foo' => null), array());
+        $this->assertParseOk(
+            [],
+            ['a' => null, 'boo' => null, 'foo' => null],
+            []
+        );
     }
 
     public function testShortOptEmptyLongOptAppend()
     {
-        $this->assertParseOk(array("-a", "", "--foo=blah", "--foo="),
-                             array('a' => "", 'boo' => null, 'foo' => array("blah", "")),
-                             array());
+        $this->assertParseOk(
+            ["-a", "", "--foo=blah", "--foo="],
+            ['a' => "", 'boo' => null, 'foo' => ["blah", ""]],
+            []
+        );
     }
 
     public function testLongOptionAppend()
     {
-        $this->assertParseOk(array("--foo", "bar", "--foo", "", "--foo=x"),
-                             array('a' => null,
-                                   'boo' => null,
-                                   'foo' => array('bar', '', 'x')),
-                             array());
+        $this->assertParseOk(
+            ["--foo", "bar", "--foo", "", "--foo=x"],
+            ['a' => null,
+                'boo' => null,
+                'foo' => ['bar', '', 'x']],
+            []
+        );
     }
 
     public function testOptionArgumentJoined()
     {
-        $this->assertParseOk(array("-abc"),
-                             array('a' => "bc", 'boo' => null, 'foo' => null),
-                             array());
+        $this->assertParseOk(
+            ["-abc"],
+            ['a' => "bc", 'boo' => null, 'foo' => null],
+            []
+        );
     }
 
     public function testOptionArgumentSplit()
     {
-        $this->assertParseOk(array("-a", "34"),
-                             array('a' => "34", 'boo' => null, 'foo' => null),
-                             array());
+        $this->assertParseOk(
+            ["-a", "34"],
+            ['a' => "34", 'boo' => null, 'foo' => null],
+            []
+        );
     }
 
     public function testOptionArgumentJoinedInteger()
     {
-        $this->assertParseOk(array("-b34"),
-                             array('a' => null, 'boo' => 34, 'foo' => null),
-                             array());
+        $this->assertParseOk(
+            ["-b34"],
+            ['a' => null, 'boo' => 34, 'foo' => null],
+            []
+        );
     }
 
     public function testOptionArgumentSplitNegativeInteger()
     {
-        $this->assertParseOk(array("-b", "-5"),
-                             array('a' => null, 'boo' => -5, 'foo' => null),
-                             array());
+        $this->assertParseOk(
+            ["-b", "-5"],
+            ['a' => null, 'boo' => -5, 'foo' => null],
+            []
+        );
     }
 
     public function testLongOptionArgumentJoined()
     {
-        $this->assertParseOk(array("--boo=13"),
-                             array('a' => null, 'boo' => 13, 'foo' => null),
-                             array());
+        $this->assertParseOk(
+            ["--boo=13"],
+            ['a' => null, 'boo' => 13, 'foo' => null],
+            []
+        );
     }
 
     public function testLongOptionArgumentSplit()
     {
-        $this->assertParseOk(array("--boo", "111"),
-                             array('a' => null, 'boo' => 111, 'foo' => null),
-                             array());
+        $this->assertParseOk(
+            ["--boo", "111"],
+            ['a' => null, 'boo' => 111, 'foo' => null],
+            []
+        );
     }
 
     public function testLongOptionShortOption()
     {
-        $this->assertParseOk(array("--foo=bar", "-axyz"),
-                             array('a' => 'xyz', 'boo' => null, 'foo' => array("bar")),
-                             array());
+        $this->assertParseOk(
+            ["--foo=bar", "-axyz"],
+            ['a' => 'xyz', 'boo' => null, 'foo' => ["bar"]],
+            []
+        );
     }
 
     public function testAbbrevLongOption()
     {
-        $this->assertParseOk(array("--f=bar", "-axyz"),
-                             array('a' => 'xyz', 'boo' => null, 'foo' => array("bar")),
-                             array());
+        $this->assertParseOk(
+            ["--f=bar", "-axyz"],
+            ['a' => 'xyz', 'boo' => null, 'foo' => ["bar"]],
+            []
+        );
     }
 
     public function testDefaults()
     {
-        list($options, $args) = $this->parser->parseArgs(array());
+        [$options, $args] = $this->parser->parseArgs([]);
         $defaults = $this->parser->getDefaultValues();
 
         $this->assertEquals($defaults, $options);
@@ -139,70 +172,87 @@ class StandardTest extends TestCase
 
     public function testAmbiguousOption()
     {
-        $this->parser->addOption("--foz", array('action' => 'store',
-                                                'type' => 'string', 'dest' => 'foo'));
-        $this->assertParseFail(array('--f=bar'),
-                               "ambiguous option: --f (--foo, --foz?)");
+        $this->parser->addOption("--foz", ['action' => 'store',
+            'type' => 'string', 'dest' => 'foo']);
+        $this->assertParseFail(
+            ['--f=bar'],
+            "ambiguous option: --f (--foo, --foz?)"
+        );
     }
 
     public function testShortAndLongOptionSplit()
     {
-        $this->assertParseOk(array("-a", "xyz", "--foo", "bar"),
-                             array('a' => 'xyz', 'boo' => null, 'foo' => array("bar")),
-                             array());
+        $this->assertParseOk(
+            ["-a", "xyz", "--foo", "bar"],
+            ['a' => 'xyz', 'boo' => null, 'foo' => ["bar"]],
+            []
+        );
     }
 
     public function testShortOptionSplitLongOptionAppend()
     {
-        $this->assertParseOk(array("--foo=bar", "-b", "123", "--foo", "baz"),
-                             array('a' => null, 'boo' => 123, 'foo' => array("bar", "baz")),
-                             array());
+        $this->assertParseOk(
+            ["--foo=bar", "-b", "123", "--foo", "baz"],
+            ['a' => null, 'boo' => 123, 'foo' => ["bar", "baz"]],
+            []
+        );
     }
 
     public function testShortOptionSplitOnePositionalArg()
     {
-        $this->assertParseOk(array("-a", "foo", "bar"),
-                             array('a' => "foo", 'boo' => null, 'foo' => null),
-                             array("bar"));
+        $this->assertParseOk(
+            ["-a", "foo", "bar"],
+            ['a' => "foo", 'boo' => null, 'foo' => null],
+            ["bar"]
+        );
     }
 
     public function testShortOptionConsumesSeparator()
     {
-        $this->assertParseOk(array("-a", "--", "foo", "bar"),
-                             array('a' => "--", 'boo' => null, 'foo' => null),
-                             array("foo", "bar"));
+        $this->assertParseOk(
+            ["-a", "--", "foo", "bar"],
+            ['a' => "--", 'boo' => null, 'foo' => null],
+            ["foo", "bar"]
+        );
 
-        $this->assertParseOk(array("-a", "--", "--foo", "bar"),
-                             array('a' => "--", 'boo' => null, 'foo' => array("bar")),
-                             array());
+        $this->assertParseOk(
+            ["-a", "--", "--foo", "bar"],
+            ['a' => "--", 'boo' => null, 'foo' => ["bar"]],
+            []
+        );
     }
 
     public function testShortOptionJoinedAndSeparator()
     {
-        $this->assertParseOk(array("-ab", "--", "--foo", "bar"),
-                             array('a' => "b", 'boo' => null, 'foo' => null),
-                             array("--foo", "bar"));
+        $this->assertParseOk(
+            ["-ab", "--", "--foo", "bar"],
+            ['a' => "b", 'boo' => null, 'foo' => null],
+            ["--foo", "bar"]
+        );
     }
 
     public function testHyphenBecomesPositionalArg()
     {
-        $this->assertParseOk(array("-ab", "-", "--foo", "bar"),
-                             array('a' => "b", 'boo' => null, 'foo' => array("bar")),
-                             array("-"));
+        $this->assertParseOk(
+            ["-ab", "-", "--foo", "bar"],
+            ['a' => "b", 'boo' => null, 'foo' => ["bar"]],
+            ["-"]
+        );
     }
 
     public function testNoAppendVersusAppend()
     {
-        $this->assertParseOk(array("-b3", "-b", "5", "--foo=bar", "--foo", "baz"),
-                             array('a' => null, 'boo' => 5, 'foo' => array("bar", "baz")),
-                             array());
+        $this->assertParseOk(
+            ["-b3", "-b", "5", "--foo=bar", "--foo", "baz"],
+            ['a' => null, 'boo' => 5, 'foo' => ["bar", "baz"]],
+            []
+        );
     }
 
     public function testOptionConsumesOptionLikeString()
     {
-        $this->assertParseOk(array("-a", "-b3"),
-                             array('a' => "-b3", 'boo' => null, 'foo' => null),
-                             array());
+        $this->assertParseOk(["-a", "-b3"],
+            ['a' => "-b3", 'boo' => null, 'foo' => null],
+            []);
     }
 }
-

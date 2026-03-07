@@ -1,9 +1,10 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
-use \Horde_Argv_IndentedHelpFormatter;
-use \Horde_Cli_Color;
+
+use Horde_Argv_Parser;
+use Horde_Argv_IndentedHelpFormatter;
+use Horde_Cli_Color;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -12,6 +13,7 @@ use \Horde_Cli_Color;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class ProgNameTest extends TestCase
@@ -19,7 +21,7 @@ class ProgNameTest extends TestCase
     public function setUp(): void
     {
         if (!isset($_SERVER['argv'])) {
-            $_SERVER['argv'] = array('test');
+            $_SERVER['argv'] = ['test'];
         }
     }
 
@@ -45,14 +47,17 @@ class ProgNameTest extends TestCase
         $saveArgv = $_SERVER['argv'];
         try {
             $_SERVER['argv'][0] = 'foo/bar/baz.php';
-            $parser = new Horde_Argv_Parser(array(
+            $parser = new Horde_Argv_Parser([
                 'usage' => "%prog ...",
                 'version' => "%prog 1.2",
                 'formatter' => new Horde_Argv_IndentedHelpFormatter(
-                    2, 24, null, true,
+                    2,
+                    24,
+                    null,
+                    true,
                     new Horde_Cli_Color(Horde_Cli_Color::FORMAT_NONE)
-                )
-            ));
+                ),
+            ]);
             $expectedUsage = "Usage: baz.php ...\n";
         } catch (Exception $e) {
             $_SERVER['argv'] = $saveArgv;
@@ -61,24 +66,29 @@ class ProgNameTest extends TestCase
 
         $this->assertUsage($parser, $expectedUsage);
         $this->assertVersion($parser, "baz.php 1.2");
-        $this->assertHelp($parser,
-                          $expectedUsage . "\n" .
-                          "Options:\n" .
-                          "  --version   show program's version number and exit\n" .
-                          "  -h, --help  show this help message and exit\n");
+        $this->assertHelp(
+            $parser,
+            $expectedUsage . "\n"
+                          . "Options:\n"
+                          . "  --version   show program's version number and exit\n"
+                          . "  -h, --help  show this help message and exit\n"
+        );
     }
 
     public function testCustomProgName()
     {
-        $parser = new Horde_Argv_Parser(array(
+        $parser = new Horde_Argv_Parser([
             'prog' => 'thingy',
             'version' => "%prog 0.1",
             'usage' => "%prog arg arg",
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
-                2, 24, null, true,
+                2,
+                24,
+                null,
+                true,
                 new Horde_Cli_Color(Horde_Cli_Color::FORMAT_NONE)
-            )
-        ));
+            ),
+        ]);
         $parser->removeOption('-h');
         $parser->removeOption('--version');
         $expectedUsage = "Usage: thingy arg arg\n";

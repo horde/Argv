@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Option;
+
+use Horde_Argv_Option;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Option;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class ParseNumTest extends TestCase
@@ -18,8 +20,8 @@ class ParseNumTest extends TestCase
     {
         parent::setUp();
         $this->parser = new InterceptingParser();
-        $this->parser->addOption('-n', array('type' => 'int'));
-        $this->parser->addOption('-l', array('type' => 'long'));
+        $this->parser->addOption('-n', ['type' => 'int']);
+        $this->parser->addOption('-l', ['type' => 'long']);
     }
 
     public function testParseNumFail()
@@ -30,35 +32,57 @@ class ParseNumTest extends TestCase
 
     public function testParseNumOk()
     {
-        $this->assertSame(0,
-                          Horde_Argv_Option::parseNumber('0'));
-        $this->assertSame(16,
-                          Horde_Argv_Option::parseNumber('0x10'));
-        $this->assertSame(10,
-                          Horde_Argv_Option::parseNumber('0XA'));
-        $this->assertSame(8,
-                          Horde_Argv_Option::parseNumber('010'));
-        $this->assertSame(3,
-                          Horde_Argv_Option::parseNumber('0b11'));
-        $this->assertSame(0,
-                          Horde_Argv_Option::parseNumber('0b'));
+        $this->assertSame(
+            0,
+            Horde_Argv_Option::parseNumber('0')
+        );
+        $this->assertSame(
+            16,
+            Horde_Argv_Option::parseNumber('0x10')
+        );
+        $this->assertSame(
+            10,
+            Horde_Argv_Option::parseNumber('0XA')
+        );
+        $this->assertSame(
+            8,
+            Horde_Argv_Option::parseNumber('010')
+        );
+        $this->assertSame(
+            3,
+            Horde_Argv_Option::parseNumber('0b11')
+        );
+        $this->assertSame(
+            0,
+            Horde_Argv_Option::parseNumber('0b')
+        );
     }
 
     public function testNumericOptions()
     {
-        $this->assertParseOk(array("-n", "42", "-l", "0x20"),
-                             array("n" => 42, "l" => 0x20), array());
+        $this->assertParseOk(
+            ["-n", "42", "-l", "0x20"],
+            ["n" => 42, "l" => 0x20],
+            []
+        );
 
-        $this->assertParseOk(array("-n", "0b0101", "-l010"),
-                             array("n" => 5, "l" => 8), array());
+        $this->assertParseOk(
+            ["-n", "0b0101", "-l010"],
+            ["n" => 5, "l" => 8],
+            []
+        );
 
-        $this->assertParseFail(array("-n008"),
-                               "option -n: invalid integer value: '008'");
+        $this->assertParseFail(
+            ["-n008"],
+            "option -n: invalid integer value: '008'"
+        );
 
-        $this->assertParseFail(array("-l0b0123"),
-                               "option -l: invalid long integer value: '0b0123'");
+        $this->assertParseFail(
+            ["-l0b0123"],
+            "option -l: invalid long integer value: '0b0123'"
+        );
 
-        $this->assertParseFail(array("-l", "0x12x"),
-                               "option -l: invalid long integer value: '0x12x'");
+        $this->assertParseFail(["-l", "0x12x"],
+            "option -l: invalid long integer value: '0x12x'");
     }
 }

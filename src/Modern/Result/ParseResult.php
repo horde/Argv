@@ -55,8 +55,7 @@ readonly class ParseResult
         public ?OptionValues $globalOptions = null,
         public ?OptionValues $contextOptions = null,
         public ?string $context = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Check if unknown options were encountered.

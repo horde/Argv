@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Horde\Argv\Modern\Exception;
 
 use Throwable;
+use Exception;
 
 /**
  * Required value missing exception.
@@ -27,7 +28,7 @@ use Throwable;
  * @category Horde
  * @package  Argv
  */
-class MissingValueException extends \Exception
+class MissingValueException extends Exception
 {
     /**
      * Constructor.

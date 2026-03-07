@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -14,7 +15,9 @@ declare(strict_types=1);
  * @category Horde
  * @package  Argv
  */
+
 namespace Horde\Argv;
+
 use ArrayIterator;
 use ArrayAccess;
 use Countable;
@@ -24,7 +27,7 @@ use stdClass;
 
 /**
  * Result hash for Horde_Argv_Parser
- * 
+ *
  * This is a value object and inherently uses dynamic properties. Do not try to "fix" this.
  *
  * @category  Horde
@@ -36,7 +39,7 @@ use stdClass;
  */
 class Values extends stdClass implements IteratorAggregate, ArrayAccess, Countable
 {
-    public function __construct($defaults = array())
+    public function __construct($defaults = [])
     {
         foreach ($defaults as $attr => $val) {
             $this->$attr = $val;
@@ -45,9 +48,9 @@ class Values extends stdClass implements IteratorAggregate, ArrayAccess, Countab
 
     public function __toString(): string
     {
-        $str = array();
+        $str = [];
         foreach ($this as $attr => $val) {
-            $str[] = $attr . ': ' . (string)$val;
+            $str[] = $attr . ': ' . (string) $val;
         }
         return implode(', ', $str);
     }

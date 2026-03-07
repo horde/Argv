@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,24 +11,29 @@ use \Horde_Argv_Parser;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class MatchAbbrevTest extends TestCase
 {
     public function testMatchAbbrev()
     {
-        $this->assertEquals(Horde_Argv_Parser::matchAbbrev("--f",
-            array("--foz" => null,
-                  "--foo" => null,
-                  "--fie" => null,
-                  "--f"   => null)),
-            '--f');
+        $this->assertEquals(
+            Horde_Argv_Parser::matchAbbrev(
+                "--f",
+                ["--foz" => null,
+                    "--foo" => null,
+                    "--fie" => null,
+                    "--f"   => null]
+            ),
+            '--f'
+        );
     }
 
     public function testMatchAbbrevError()
     {
         $s = '--f';
-        $wordmap = array("--foz" => null, "--foo" => null, "--fie" => null);
+        $wordmap = ["--foz" => null, "--foo" => null, "--fie" => null];
 
         $this->expectException('Horde_Argv_AmbiguousOptionException');
 

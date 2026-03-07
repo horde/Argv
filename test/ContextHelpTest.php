@@ -20,6 +20,7 @@ use Horde\Argv\Modern\Builder\{ParserBuilder, OptionBuilder, ContextBuilder};
 use Horde\Argv\Modern\Help\HelpFormatter;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use InvalidArgumentException;
 
 /**
  * Tests for context help generation (Phase 3).
@@ -132,7 +133,7 @@ class ContextHelpTest extends TestCase
     {
         $parser = ParserBuilder::create()->build();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown context: nonexistent');
 
         $parser->formatContextHelp('nonexistent');

@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -14,7 +15,9 @@ declare(strict_types=1);
  * @category Horde
  * @package  Argv
  */
+
 namespace Horde\Argv;
+
 use Horde\Cli\Color;
 use Horde\Cli\Cli;
 use Horde\Util\HordeString;
@@ -73,7 +76,7 @@ use InvalidArgumentException;
  */
 abstract class HelpFormatter
 {
-    const NO_DEFAULT_VALUE = 'none';
+    public const NO_DEFAULT_VALUE = 'none';
 
     public $parser = null;
     public $_color;
@@ -91,10 +94,12 @@ abstract class HelpFormatter
     public $short_first;
 
     public function __construct(
-        $indent_increment, $max_help_position, $width = null,
-        $short_first = false, $color = null
-    )
-    {
+        $indent_increment,
+        $max_help_position,
+        $width = null,
+        $short_first = false,
+        $color = null
+    ) {
         if (is_null($color)) {
             $color = new Color();
         }
@@ -111,7 +116,7 @@ abstract class HelpFormatter
         $this->help_width = null; // computed later
         $this->short_first = $short_first;
         $this->default_tag = '%default';
-        $this->option_strings = array();
+        $this->option_strings = [];
         $this->_short_opt_fmt = '%s %s';
         $this->_long_opt_fmt = '%s=%s';
     }
@@ -123,7 +128,7 @@ abstract class HelpFormatter
 
     public function setShortOptDelimiter($delim)
     {
-        if (!in_array($delim, array('', ' '))) {
+        if (!in_array($delim, ['', ' '])) {
             throw new InvalidArgumentException('invalid metavar delimiter for short options: ' . $delim);
         }
         $this->_short_opt_fmt = "%s$delim%s";
@@ -131,7 +136,7 @@ abstract class HelpFormatter
 
     public function setLongOptDelimiter($delim)
     {
-        if (!in_array($delim, array('=', ' '))) {
+        if (!in_array($delim, ['=', ' '])) {
             throw new InvalidArgumentException('invalid metavar delimiter for long options: ' . $delim);
         }
         $this->_long_opt_fmt = "%s$delim%s";
@@ -203,12 +208,12 @@ abstract class HelpFormatter
             return $option->help;
         }
 
-        $default_value = isset($this->parser->defaults[$option->dest]) ? $this->parser->defaults[$option->dest] : null;
+        $default_value = $this->parser->defaults[$option->dest] ?? null;
         if ($default_value == Option::$NO_DEFAULT || !$default_value) {
             $default_value = self::NO_DEFAULT_VALUE;
         }
 
-        return str_replace($this->default_tag, (string)$default_value, $option->help);
+        return str_replace($this->default_tag, (string) $default_value, $option->help);
     }
 
     /**
@@ -229,10 +234,9 @@ abstract class HelpFormatter
      */
     public function formatOption($option)
     {
-        $result = array();
-        $opts = isset($this->option_strings[(string)$option])
-            ? $this->option_strings[(string)$option]
-            : null;
+        $result = [];
+        $opts = $this->option_strings[(string) $option]
+            ?? null;
         $opt_width = $this->help_position - $this->current_indent - 2;
         if (is_string($opts) && strlen($opts) > $opt_width) {
             $opts = sprintf(
@@ -256,11 +260,15 @@ abstract class HelpFormatter
             $help_text = $this->expandDefault($option);
             $help_lines = explode("\n", wordwrap($help_text, (int) $this->help_width, "\n", (bool) $this->help_width));
             $result[] = sprintf(
-                '%' . $indent_first . "s%s\n", '', $help_lines[0]
+                '%' . $indent_first . "s%s\n",
+                '',
+                $help_lines[0]
             );
             for ($i = 1, $i_max = count($help_lines); $i < $i_max; $i++) {
                 $result[] = sprintf(
-                    '%' . $this->help_position . "s%s\n", '', $help_lines[$i]
+                    '%' . $this->help_position . "s%s\n",
+                    '',
+                    $help_lines[$i]
                 );
             }
         } elseif (substr($opts, -1) != "\n") {
@@ -289,7 +297,7 @@ abstract class HelpFormatter
         $max_len = 0;
         foreach ($parser->optionList as $opt) {
             $strings = $this->formatOptionStrings($opt);
-            $this->option_strings[(string)$opt] = $strings;
+            $this->option_strings[(string) $opt] = $strings;
             $max_len = max(
                 $max_len,
                 strlen($strings) + $this->current_indent
@@ -299,7 +307,7 @@ abstract class HelpFormatter
         foreach ($parser->optionGroups as $group) {
             foreach ($group->optionList as $opt) {
                 $strings = $this->formatOptionStrings($opt);
-                $this->option_strings[(string)$opt] = $strings;
+                $this->option_strings[(string) $opt] = $strings;
                 $max_len = max(
                     $max_len,
                     strlen($strings)
@@ -320,11 +328,11 @@ abstract class HelpFormatter
     {
         if ($option->takesValue()) {
             $metavar = $option->metavar ? $option->metavar : HordeString::upper($option->dest);
-            $short_opts = array();
+            $short_opts = [];
             foreach ($option->shortOpts as $sopt) {
                 $short_opts[] = sprintf($this->_short_opt_fmt, $sopt, $metavar);
             }
-            $long_opts = array();
+            $long_opts = [];
             foreach ($option->longOpts as $lopt) {
                 $long_opts[] = sprintf($this->_long_opt_fmt, $lopt, $metavar);
             }

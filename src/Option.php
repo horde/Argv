@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -14,11 +15,12 @@ declare(strict_types=1);
  * @category Horde
  * @package  Argv
  */
+
 namespace Horde\Argv;
+
 use Iterator;
 use InvalidArgumentException;
 use RuntimeException;
-
 
 /**
  * Defines the Option class and some standard value-checking functions.
@@ -48,14 +50,14 @@ use RuntimeException;
  */
 class Option
 {
-    const SUPPRESS_HELP = 'SUPPRESS HELP';
-    const SUPPRESS_USAGE = 'SUPPRESS USAGE';
+    public const SUPPRESS_HELP = 'SUPPRESS HELP';
+    public const SUPPRESS_USAGE = 'SUPPRESS USAGE';
 
     /**
      * Not supplying a default is different from a default of None,
      * so we need an explicit 'not supplied' value.
      */
-    public static $NO_DEFAULT = array('NO', 'DEFAULT');
+    public static $NO_DEFAULT = ['NO', 'DEFAULT'];
 
     public static function parseNumber($value)
     {
@@ -103,25 +105,30 @@ class Option
     public function checkBuiltin($opt, $value)
     {
         switch ($this->type) {
-        case 'int':
-        case 'long':
-            $number = self::parseNumber($value);
-            if ($number === false) {
-                $message = $this->type == 'int'
-                    ? Translation::t("option %s: invalid integer value: '%s'")
-                    : Translation::t("option %s: invalid long integer value: '%s'");
-                throw new OptionValueException(
-                    sprintf($message, $opt, $value));
-            }
-            return $number;
+            case 'int':
+            case 'long':
+                $number = self::parseNumber($value);
+                if ($number === false) {
+                    $message = $this->type == 'int'
+                        ? Translation::t("option %s: invalid integer value: '%s'")
+                        : Translation::t("option %s: invalid long integer value: '%s'");
+                    throw new OptionValueException(
+                        sprintf($message, $opt, $value)
+                    );
+                }
+                return $number;
 
-        case 'float':
-            if (!is_numeric($value)) {
-                throw new OptionValueException(
-                    sprintf(Translation::t("option %s: invalid floating-point value: '%s'"),
-                            $opt, $value));
-            }
-            return floatval($value);
+            case 'float':
+                if (!is_numeric($value)) {
+                    throw new OptionValueException(
+                        sprintf(
+                            Translation::t("option %s: invalid floating-point value: '%s'"),
+                            $opt,
+                            $value
+                        )
+                    );
+                }
+                return floatval($value);
         }
     }
 
@@ -130,14 +137,17 @@ class Option
         if (in_array($value, $this->choices)) {
             return $value;
         } else {
-            $choices = array();
+            $choices = [];
             foreach ($this->choices as $choice) {
-                $choices[] = (string)$choice;
+                $choices[] = (string) $choice;
             }
             $choices = "'" . implode("', '", $choices) . "'";
             throw new OptionValueException(sprintf(
                 Translation::t("option %s: invalid choice: '%s' (choose from %s)"),
-                $opt, $value, $choices));
+                $opt,
+                $value,
+                $choices
+            ));
         }
     }
 
@@ -146,7 +156,7 @@ class Option
      * The list of instance attributes that may be set through keyword args to
      * the constructor.
      */
-    public $ATTRS = array(
+    public $ATTRS = [
         'action',
         'type',
         'dest',
@@ -158,14 +168,14 @@ class Option
         'callbackArgs',
         'help',
         'metavar',
-    );
-    
+    ];
+
 
     /**
      * The set of actions allowed by option parsers.  Explicitly listed here so
      * the constructor can validate its arguments.
      */
-    public $ACTIONS = array(
+    public $ACTIONS = [
         'store',
         'store_const',
         'store_true',
@@ -176,14 +186,14 @@ class Option
         'callback',
         'help',
         'version',
-    );
+    ];
 
     /**
      * The set of actions that involve storing a value somewhere;
      * also listed just for constructor argument validation.  (If
      * the action is one of these, there must be a destination.)
      */
-    public $STORE_ACTIONS = array(
+    public $STORE_ACTIONS = [
         'store',
         'store_const',
         'store_true',
@@ -191,35 +201,35 @@ class Option
         'append',
         'append_const',
         'count',
-    );
+    ];
 
     /**
      * The set of actions for which it makes sense to supply a value type,
      * ie. which may consume an argument from the command line.
      */
-    public $TYPED_ACTIONS = array(
+    public $TYPED_ACTIONS = [
         'store',
         'append',
         'callback',
-    );
+    ];
 
     /**
      * The set of actions which *require* a value type, ie. that always consume
      * an argument from the command line.
      */
-    public $ALWAYS_TYPED_ACTIONS = array('store', 'append');
+    public $ALWAYS_TYPED_ACTIONS = ['store', 'append'];
 
     /**
      * The set of actions which take a 'const' attribute.
      */
-    public $CONST_ACTIONS = array('store_const', 'append_const');
+    public $CONST_ACTIONS = ['store_const', 'append_const'];
 
     /**
      * The set of known types for option parsers.
      *
      * Again, listed here for constructor argument validation.
      */
-    public $TYPES = array('string', 'int', 'long', 'float', 'complex', 'choice');
+    public $TYPES = ['string', 'int', 'long', 'float', 'complex', 'choice'];
 
     /**
      * Dictionary of argument checking functions, which convert and validate
@@ -242,12 +252,12 @@ class Option
      * If no checker is defined for a type, arguments will be unchecked and
      * remain strings.
      */
-    public $TYPE_CHECKER = array('int'     => 'checkBuiltin',
-                                 'long'    => 'checkBuiltin',
-                                 'float'   => 'checkBuiltin',
-                                 'complex' => 'checkBuiltin',
-                                 'choice'  => 'checkChoice',
-    );
+    public $TYPE_CHECKER = ['int'     => 'checkBuiltin',
+        'long'    => 'checkBuiltin',
+        'float'   => 'checkBuiltin',
+        'complex' => 'checkBuiltin',
+        'choice'  => 'checkChoice',
+    ];
 
     /**
      * A list of unbound method objects.
@@ -259,19 +269,19 @@ class Option
      * that add another _check_*() method should define their own CHECK_METHODS
      * list that adds their check method to those from this class.
      */
-    public $CHECK_METHODS = array('_checkAction',
-                                  '_checkType',
-                                  '_checkChoice',
-                                  '_checkDest',
-                                  '_checkConst',
-                                  '_checkNargs',
-                                  '_checkCallback',
-    );
+    public $CHECK_METHODS = ['_checkAction',
+        '_checkType',
+        '_checkChoice',
+        '_checkDest',
+        '_checkConst',
+        '_checkNargs',
+        '_checkCallback',
+    ];
 
     // -- Constructor/initialization methods ----------------------------
 
-    public $shortOpts = array();
-    public $longOpts = array();
+    public $shortOpts = [];
+    public $longOpts = [];
     // These should probably be made readonly once we are sure we *really* usually set them through a constructor
     public $action;
     public $type;
@@ -286,7 +296,7 @@ class Option
     // TODO: Where is this even used?
     public $metavar;
     // Used in OptionContainer->addOption
-    public $container; 
+    public $container;
 
     /**
      * Constructor.
@@ -300,15 +310,15 @@ class Option
         $opts = func_get_args();
         $num = func_num_args();
         if ($num == 0 || $num == 1 || !is_array($opts[$num - 1])) {
-            $attrs = array();
+            $attrs = [];
         } else {
             $attrs = array_pop($opts);
         }
 
         // Set shortOpts, longOpts attrs from 'opts' tuple.
         // Have to be set now, in case no option strings are supplied.
-        $this->shortOpts = array();
-        $this->longOpts = array();
+        $this->shortOpts = [];
+        $this->longOpts = [];
         $opts = $this->_checkOptStrings($opts);
         $this->_setOptStrings($opts);
 
@@ -321,7 +331,7 @@ class Option
         // could be handy for subclasses!  The one thing these all share
         // is that they raise OptionError if they discover a problem.
         foreach ($this->CHECK_METHODS as $checker) {
-            call_user_func(array($this, $checker));
+            call_user_func([$this, $checker]);
         }
     }
 
@@ -340,22 +350,26 @@ class Option
     protected function _setOptStrings($opts)
     {
         foreach ($opts as &$opt) {
-            $opt = (string)$opt;
+            $opt = (string) $opt;
 
             if (strlen($opt) < 2) {
                 throw new OptionException(sprintf("invalid option string '%s': must be at least two characters long", $opt), $this);
             } elseif (strlen($opt) == 2) {
                 if (!($opt[0] == '-' && $opt[1] != '-')) {
                     throw new OptionException(sprintf(
-                        "invalid short option string '%s': " .
-                        "must be of the form -x, (x any non-dash char)", $opt), $this);
+                        "invalid short option string '%s': "
+                        . "must be of the form -x, (x any non-dash char)",
+                        $opt
+                    ), $this);
                 }
                 $this->shortOpts[] = $opt;
             } else {
                 if (!(substr($opt, 0, 2) == '--' && $opt[2] != '-')) {
                     throw new OptionException(sprintf(
-                        "invalid long option string '%s': " .
-                        "must start with --, followed by non-dash", $opt), $this);
+                        "invalid long option string '%s': "
+                        . "must start with --, followed by non-dash",
+                        $opt
+                    ), $this);
                 }
                 $this->longOpts[] = $opt;
             }
@@ -381,7 +395,9 @@ class Option
             $attrs = array_keys($attrs);
             sort($attrs);
             throw new OptionException(sprintf(
-                'invalid keyword arguments: %s', implode(', ', $attrs)), $this);
+                'invalid keyword arguments: %s',
+                implode(', ', $attrs)
+            ), $this);
         }
     }
 
@@ -420,7 +436,9 @@ class Option
 
             if (!in_array($this->action, $this->TYPED_ACTIONS)) {
                 throw new OptionException(sprintf(
-                    "must not supply a type for action '%s'", $this->action), $this);
+                    "must not supply a type for action '%s'",
+                    $this->action
+                ), $this);
             }
         }
     }
@@ -430,15 +448,20 @@ class Option
         if ($this->type == 'choice') {
             if (is_null($this->choices)) {
                 throw new OptionException(
-                    "must supply a list of choices for type 'choice'", $this);
+                    "must supply a list of choices for type 'choice'",
+                    $this
+                );
             } elseif (!(is_array($this->choices) || $this->choices instanceof Iterator)) {
                 throw new OptionException(sprintf(
                     "choices must be a list of strings ('%s' supplied)",
-                    gettype($this->choices)), $this);
+                    gettype($this->choices)
+                ), $this);
             }
         } elseif (!is_null($this->choices)) {
             throw new OptionException(sprintf(
-                "must not supply choices for type '%s'", $this->type), $this);
+                "must not supply choices for type '%s'",
+                $this->type
+            ), $this);
         }
     }
 
@@ -446,8 +469,8 @@ class Option
     {
         // No destination given, and we need one for this action.  The
         // $this->type check is for callbacks that take a value.
-        $takes_value = (in_array($this->action, $this->STORE_ACTIONS) ||
-                        !is_null($this->type));
+        $takes_value = (in_array($this->action, $this->STORE_ACTIONS)
+                        || !is_null($this->type));
         if (is_null($this->dest) && $takes_value) {
             // Glean a destination from the first long option string,
             // or from the first short option string if no long options.
@@ -463,9 +486,13 @@ class Option
     public function _checkConst()
     {
         if (!in_array($this->action, $this->CONST_ACTIONS) && !is_null($this->const)) {
-            throw new OptionException(sprintf(
-                "'const' must not be supplied for action '%s'", $this->action),
-                $this);
+            throw new OptionException(
+                sprintf(
+                    "'const' must not be supplied for action '%s'",
+                    $this->action
+                ),
+                $this
+            );
         }
     }
 
@@ -476,9 +503,13 @@ class Option
                 $this->nargs = 1;
             }
         } elseif (!is_null($this->nargs)) {
-            throw new OptionException(sprintf(
-                "'nargs' must not be supplied for action '%s'", $this->action),
-                $this);
+            throw new OptionException(
+                sprintf(
+                    "'nargs' must not be supplied for action '%s'",
+                    $this->action
+                ),
+                $this
+            );
         }
     }
 
@@ -491,32 +522,38 @@ class Option
                 $callback_name = '';
                 if (is_array($this->callback)) {
                     if (is_object($this->callback[0])) {
-                        $callback_name = get_class($this->callback[0]) . '#' .  $this->callback[1];
+                        $callback_name = get_class($this->callback[0]) . '#' . $this->callback[1];
                     } else {
                         $callback_name = implode('#', $this->callback);
-                        }
+                    }
                 } else {
                     throw new OptionException(sprintf(
-                        "callback not callable: '%s'", $callback_name), $this);
+                        "callback not callable: '%s'",
+                        $callback_name
+                    ), $this);
                 }
             }
             if (!is_null($this->callbackArgs) && !is_array($this->callbackArgs)) {
                 throw new OptionException(sprintf(
                     "callbackArgs, if supplied, must be an array: not '%s'",
-                    $this->callbackArgs), $this);
+                    $this->callbackArgs
+                ), $this);
             }
         } else {
             if (!is_null($this->callback)) {
-                $callback_name = is_array($this->callback) ?
-                    is_object($this->callback[0]) ? get_class($this->callback[0]) . '#' . $this->callback[1] : implode('#', $this->callback) :
-                    $this->callback;
+                $callback_name = is_array($this->callback)
+                    ? is_object($this->callback[0]) ? get_class($this->callback[0]) . '#' . $this->callback[1] : implode('#', $this->callback)
+                    : $this->callback;
                 throw new OptionException(sprintf(
                     "callback supplied ('%s') for non-callback option",
-                    $callback_name), $this);
+                    $callback_name
+                ), $this);
             }
             if (!is_null($this->callbackArgs)) {
                 throw new OptionException(
-                    'callbackArgs supplied for non-callback option', $this);
+                    'callbackArgs supplied for non-callback option',
+                    $this
+                );
             }
         }
     }
@@ -557,7 +594,7 @@ class Option
             return $value;
         }
         $checker = $this->TYPE_CHECKER[$this->type];
-        return call_user_func(array($this, $checker), $opt, $value);
+        return call_user_func([$this, $checker], $opt, $value);
     }
 
     public function convertValue($opt, $value)
@@ -566,7 +603,7 @@ class Option
             if ($this->nargs == 1) {
                 return $this->checkValue($opt, $value);
             } else {
-                $return = array();
+                $return = [];
                 foreach ($value as $v) {
                     $return[] = $this->checkValue($opt, $v);
                 }
@@ -585,7 +622,13 @@ class Option
         // This is a separate method to make life easier for
         // subclasses to add new actions.
         return $this->takeAction(
-            $this->action, $this->dest, $opt, $value, $values, $parser);
+            $this->action,
+            $this->dest,
+            $opt,
+            $value,
+            $values,
+            $parser
+        );
     }
 
     public function takeAction($action, $dest, $opt, $value, $values, $parser)

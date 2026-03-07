@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -67,7 +68,7 @@
  */
 abstract class Horde_Argv_HelpFormatter
 {
-    const NO_DEFAULT_VALUE = 'none';
+    public const NO_DEFAULT_VALUE = 'none';
 
     public $parser = null;
     public $_color;
@@ -85,10 +86,12 @@ abstract class Horde_Argv_HelpFormatter
     public $short_first;
 
     public function __construct(
-        $indent_increment, $max_help_position, $width = null,
-        $short_first = false, $color = null
-    )
-    {
+        $indent_increment,
+        $max_help_position,
+        $width = null,
+        $short_first = false,
+        $color = null
+    ) {
         if (is_null($color)) {
             $color = new Horde_Cli_Color();
         }
@@ -117,7 +120,7 @@ abstract class Horde_Argv_HelpFormatter
 
     public function setShortOptDelimiter($delim)
     {
-        if (!in_array($delim, array('', ' '))) {
+        if (!in_array($delim, ['', ' '])) {
             throw new InvalidArgumentException('invalid metavar delimiter for short options: ' . $delim);
         }
         $this->_short_opt_fmt = "%s$delim%s";
@@ -125,7 +128,7 @@ abstract class Horde_Argv_HelpFormatter
 
     public function setLongOptDelimiter($delim)
     {
-        if (!in_array($delim, array('=', ' '))) {
+        if (!in_array($delim, ['=', ' '])) {
             throw new InvalidArgumentException('invalid metavar delimiter for long options: ' . $delim);
         }
         $this->_long_opt_fmt = "%s$delim%s";
@@ -197,12 +200,12 @@ abstract class Horde_Argv_HelpFormatter
             return $option->help;
         }
 
-        $default_value = isset($this->parser->defaults[$option->dest]) ? $this->parser->defaults[$option->dest] : null;
+        $default_value = $this->parser->defaults[$option->dest] ?? null;
         if ($default_value == Horde_Argv_Option::$NO_DEFAULT || !$default_value) {
             $default_value = self::NO_DEFAULT_VALUE;
         }
 
-        return str_replace($this->default_tag, (string)$default_value, $option->help);
+        return str_replace($this->default_tag, (string) $default_value, $option->help);
     }
 
     /**
@@ -223,10 +226,9 @@ abstract class Horde_Argv_HelpFormatter
      */
     public function formatOption($option)
     {
-        $result = array();
-        $opts = isset($this->option_strings[(string)$option])
-            ? $this->option_strings[(string)$option]
-            : null;
+        $result = [];
+        $opts = $this->option_strings[(string) $option]
+            ?? null;
         $opt_width = $this->help_position - $this->current_indent - 2;
         if (strlen($opts) > $opt_width) {
             $opts = sprintf(
@@ -250,11 +252,15 @@ abstract class Horde_Argv_HelpFormatter
             $help_text = $this->expandDefault($option);
             $help_lines = explode("\n", wordwrap($help_text, $this->help_width, "\n", true));
             $result[] = sprintf(
-                '%' . $indent_first . "s%s\n", '', $help_lines[0]
+                '%' . $indent_first . "s%s\n",
+                '',
+                $help_lines[0]
             );
             for ($i = 1, $i_max = count($help_lines); $i < $i_max; $i++) {
                 $result[] = sprintf(
-                    '%' . $this->help_position . "s%s\n", '', $help_lines[$i]
+                    '%' . $this->help_position . "s%s\n",
+                    '',
+                    $help_lines[$i]
                 );
             }
         } elseif (substr($opts, -1) != "\n") {
@@ -283,7 +289,7 @@ abstract class Horde_Argv_HelpFormatter
         $max_len = 0;
         foreach ($parser->optionList as $opt) {
             $strings = $this->formatOptionStrings($opt);
-            $this->option_strings[(string)$opt] = $strings;
+            $this->option_strings[(string) $opt] = $strings;
             $max_len = max(
                 $max_len,
                 strlen($strings) + $this->current_indent
@@ -293,7 +299,7 @@ abstract class Horde_Argv_HelpFormatter
         foreach ($parser->optionGroups as $group) {
             foreach ($group->optionList as $opt) {
                 $strings = $this->formatOptionStrings($opt);
-                $this->option_strings[(string)$opt] = $strings;
+                $this->option_strings[(string) $opt] = $strings;
                 $max_len = max(
                     $max_len,
                     strlen($strings)
@@ -314,11 +320,11 @@ abstract class Horde_Argv_HelpFormatter
     {
         if ($option->takesValue()) {
             $metavar = $option->metavar ? $option->metavar : Horde_String::upper($option->dest);
-            $short_opts = array();
+            $short_opts = [];
             foreach ($option->shortOpts as $sopt) {
                 $short_opts[] = sprintf($this->_short_opt_fmt, $sopt, $metavar);
             }
-            $long_opts = array();
+            $long_opts = [];
             foreach ($option->longOpts as $lopt) {
                 $long_opts[] = sprintf($this->_long_opt_fmt, $lopt, $metavar);
             }

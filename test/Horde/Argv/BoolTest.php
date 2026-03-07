@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Parser;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class BoolTest extends TestCase
@@ -17,45 +19,59 @@ class BoolTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $options = array(
-            $this->makeOption('-v', '--verbose',
-                        array('action' => 'store_true', 'dest' => 'verbose', 'default' => '')),
-            $this->makeOption('-q', '--quiet',
-                        array('action' => 'store_false', 'dest' => 'verbose'))
-        );
+        $options = [
+            $this->makeOption(
+                '-v',
+                '--verbose',
+                ['action' => 'store_true', 'dest' => 'verbose', 'default' => '']
+            ),
+            $this->makeOption(
+                '-q',
+                '--quiet',
+                ['action' => 'store_false', 'dest' => 'verbose']
+            ),
+        ];
 
-        $this->parser = new Horde_Argv_Parser(array('optionList' => $options));
+        $this->parser = new Horde_Argv_Parser(['optionList' => $options]);
     }
 
     public function testBoolDefault()
     {
-        $this->assertParseOk(array(),
-                             array('verbose' => ''),
-                             array());
+        $this->assertParseOk(
+            [],
+            ['verbose' => ''],
+            []
+        );
     }
 
     public function testBoolFalse()
     {
-        list($options, $args) = $this->assertParseOk(array('-q'),
-                                                     array('verbose' => false),
-                                                     array());
+        [$options, $args] = $this->assertParseOk(
+            ['-q'],
+            ['verbose' => false],
+            []
+        );
 
         $this->assertSame(false, $options->verbose);
     }
 
     public function testBoolTrue()
     {
-        list($options, $args) = $this->assertParseOk(array('-v'),
-                                                     array('verbose' => true),
-                                                     array());
+        [$options, $args] = $this->assertParseOk(
+            ['-v'],
+            ['verbose' => true],
+            []
+        );
         $this->assertSame(true, $options->verbose);
     }
 
     public function testBoolFlickerOnAndOff()
     {
-        $this->assertParseOk(array('-qvq', '-q', '-v'),
-                             array('verbose' => true),
-                             array());
+        $this->assertParseOk(
+            ['-qvq', '-q', '-v'],
+            ['verbose' => true],
+            []
+        );
     }
 
 }

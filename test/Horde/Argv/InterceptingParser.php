@@ -1,6 +1,7 @@
 <?php
 
 namespace Horde\Argv;
+
 use Horde_Argv_Parser;
 
 /**

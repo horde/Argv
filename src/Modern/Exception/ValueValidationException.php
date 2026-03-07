@@ -18,6 +18,7 @@ namespace Horde\Argv\Modern\Exception;
 
 use Horde\Argv\Modern\Enum\OptionType;
 use Throwable;
+use Exception;
 
 /**
  * Value validation failed exception.
@@ -28,7 +29,7 @@ use Throwable;
  * @category Horde
  * @package  Argv
  */
-class ValueValidationException extends \Exception
+class ValueValidationException extends Exception
 {
     /**
      * Constructor.

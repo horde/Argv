@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -7,30 +8,38 @@
  * @package    Argv
  * @subpackage UnitTests
  */
-namespace Horde\Argv;
-use \Horde_Argv_Parser;
-use \Horde_Argv_Option;
-use \Horde_Argv_IndentedHelpFormatter;
-use \Horde_Cli_Color;
 
+namespace Horde\Argv;
+
+use Horde_Argv_Parser;
+use Horde_Argv_Option;
+use Horde_Argv_IndentedHelpFormatter;
+use Horde_Cli_Color;
+
+/**
+ * @coversNothing
+ */
 class ConflictTestCase extends TestCase
 {
     public function setUp(): void
     {
-        $options = array(new Horde_Argv_Option('-v', '--verbose', array(
+        $options = [new Horde_Argv_Option('-v', '--verbose', [
             'action' => 'count',
             'dest' => 'verbose',
-            'help' => 'increment verbosity'))
-        );
+            'help' => 'increment verbosity']),
+        ];
 
-        $this->parser = new InterceptingParser(array(
+        $this->parser = new InterceptingParser([
             'usage' => Horde_Argv_Option::SUPPRESS_USAGE,
             'optionList' => $options,
             'formatter' => new Horde_Argv_IndentedHelpFormatter(
-                2, 24, null, true,
+                2,
+                24,
+                null,
+                true,
                 new Horde_Cli_Color(Horde_Cli_Color::FORMAT_NONE)
-            )
-        ));
+            ),
+        ]);
     }
 
     public function showVersion($option, $opt, $value, $parser)

@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Parser;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class CallbackManyArgsTest extends TestCase
@@ -17,35 +19,37 @@ class CallbackManyArgsTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $options = array(
-            $this->makeOption('-a', '--apple', array('action' => 'callback', 'nargs' => 2,
-                                                        'callback' => array($this, 'processMany'), 'type' => 'string')),
-            $this->makeOption('-b', '--bob', array('action' => 'callback', 'nargs' => 3,
-                                                       'callback' => array($this, 'processMany'), 'type' => 'int'))
-        );
+        $options = [
+            $this->makeOption('-a', '--apple', ['action' => 'callback', 'nargs' => 2,
+                'callback' => [$this, 'processMany'], 'type' => 'string']),
+            $this->makeOption('-b', '--bob', ['action' => 'callback', 'nargs' => 3,
+                'callback' => [$this, 'processMany'], 'type' => 'int']),
+        ];
 
-        $this->parser = new Horde_Argv_Parser(array('optionList' => $options));
+        $this->parser = new Horde_Argv_Parser(['optionList' => $options]);
     }
 
     public function processMany($option, $opt, $value, $parser_)
     {
         if ($opt == '-a') {
-            $this->assertEquals(array('foo', 'bar'), $value);
-        } else if ($opt == '--apple') {
-            $this->assertEquals(array('ding', 'dong'), $value);
-        } else if ($opt == '-b') {
-            $this->assertEquals(array(1, 2, 3), $value);
-        } else if ($option == '--bob') {
-            $this->assertEquals(array(-666, 42, 0), $value);
+            $this->assertEquals(['foo', 'bar'], $value);
+        } elseif ($opt == '--apple') {
+            $this->assertEquals(['ding', 'dong'], $value);
+        } elseif ($opt == '-b') {
+            $this->assertEquals([1, 2, 3], $value);
+        } elseif ($option == '--bob') {
+            $this->assertEquals([-666, 42, 0], $value);
         }
     }
 
     public function testManyArgs()
     {
-        $this->assertParseOk(array("-a", "foo", "bar", "--apple", "ding", "dong",
-                             "-b", "1", "2", "3", "--bob", "-666", "42",
-                             "0"),
-                             array('apple' => null, 'bob' => null),
-                             array());
+        $this->assertParseOk(
+            ["-a", "foo", "bar", "--apple", "ding", "dong",
+                "-b", "1", "2", "3", "--bob", "-666", "42",
+                "0"],
+            ['apple' => null, 'bob' => null],
+            []
+        );
     }
 }

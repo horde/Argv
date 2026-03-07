@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Parser;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class CallbackCheckAbbrevTest extends TestCase
@@ -18,8 +20,8 @@ class CallbackCheckAbbrevTest extends TestCase
     {
         parent::setUp();
         $this->parser = new Horde_Argv_Parser();
-        $this->parser->addOption('--foo-bar', array('action' => 'callback',
-                                                    'callback' => array($this, 'checkAbbrev')));
+        $this->parser->addOption('--foo-bar', ['action' => 'callback',
+            'callback' => [$this, 'checkAbbrev']]);
     }
 
     public function checkAbbrev($option, $opt, $value, $parser)
@@ -29,6 +31,6 @@ class CallbackCheckAbbrevTest extends TestCase
 
     public function testAbbrevCallbackExpansion()
     {
-        $this->assertParseOk(array('--foo'), array(), array());
+        $this->assertParseOk(['--foo'], [], []);
     }
 }

@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_OptionGroup;
+
+use Horde_Argv_OptionGroup;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_OptionGroup;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class ConflictTest extends ConflictTestCase
@@ -17,14 +19,16 @@ class ConflictTest extends ConflictTestCase
     public function assertConflictError($func)
     {
         try {
-            call_user_func($func, '-v', '--version', array(
+            call_user_func($func, '-v', '--version', [
                 'action'   => 'callback',
-                'callback' => array($this, 'showVersion'),
-                'help'     => 'show version'));
+                'callback' => [$this, 'showVersion'],
+                'help'     => 'show version']);
             $this->fail();
         } catch (Horde_Argv_OptionConflictException $e) {
-            $this->assertEquals("option -v/--version: conflicting option string(s): -v",
-                                $e->getMessage());
+            $this->assertEquals(
+                "option -v/--version: conflicting option string(s): -v",
+                $e->getMessage()
+            );
             $this->assertEquals('-v/--version', $e->optionId);
         }
     }
@@ -32,20 +36,20 @@ class ConflictTest extends ConflictTestCase
     public function testConflictError()
     {
         $this->expectException('Horde_Argv_OptionConflictException');
-        $this->assertConflictError(array($this->parser, 'addOption'));
+        $this->assertConflictError([$this->parser, 'addOption']);
     }
 
     public function testConflictErrorGroup()
     {
         $this->expectException('Horde_Argv_OptionConflictException');
         $group = new Horde_Argv_OptionGroup($this->parser, 'Group 1');
-        $this->assertConflictError(array($group, 'addOption'));
+        $this->assertConflictError([$group, 'addOption']);
     }
 
     public function testNoSuchConflictHandler()
     {
         $this->expectException('InvalidArgumentException');
-        $this->assertRaises(array($this->parser, 'setConflictHandler'), array('foo'), 'InvalidArgumentException', "invalid conflictHandler 'foo'");
+        $this->assertRaises([$this->parser, 'setConflictHandler'], ['foo'], 'InvalidArgumentException', "invalid conflictHandler 'foo'");
     }
 
 }

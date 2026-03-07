@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Argv\Parser;
 
 /**
@@ -13,7 +14,4 @@ namespace Horde\Argv\Parser;
  * @deprecated This class is under development and not ready for production use.
  *             The API is incomplete and may change without notice. Do not use in production code.
  */
-class ParserResult
-{
-
-}
+class ParserResult {}

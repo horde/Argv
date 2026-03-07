@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -24,6 +25,4 @@
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class Horde_Argv_Exception extends Horde_Exception_Wrapped
-{
-}
+class Horde_Argv_Exception extends Horde_Exception_Wrapped {}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -9,6 +10,7 @@
  */
 
 namespace Horde\Argv;
+
 use Exception;
 
 class InterceptedException extends Exception
@@ -24,12 +26,14 @@ class InterceptedException extends Exception
         $this->exit_message = $exit_message;
     }
 
-    public function __toString():string
+    public function __toString(): string
     {
-        if ($this->error_message)
+        if ($this->error_message) {
             return $this->error_message;
-        if ($this->exit_message)
+        }
+        if ($this->exit_message) {
             return $this->exit_message;
+        }
         return "intercepted error";
     }
 

@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -14,7 +15,9 @@ declare(strict_types=1);
  * @category Horde
  * @package  Argv
  */
+
 namespace Horde\Argv;
+
 use Horde_Exception_Wrapped;
 
 /**
@@ -27,6 +30,4 @@ use Horde_Exception_Wrapped;
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class Exception extends Horde_Exception_Wrapped
-{
-}
+class Exception extends Horde_Exception_Wrapped {}

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * This package is ported from Python's Optik (http://optik.sourceforge.net/).
  *
@@ -43,7 +44,7 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
 
     /**
      * __set: Set a value
-     * 
+     *
      * @param string $attr The name of the attribute
      * @param mixed $value The content of the attribute
      */
@@ -54,7 +55,7 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
 
     /**
      * __get: Returns a value of an attribute
-     * 
+     *
      * @param string $attr The name of the attribute
      * @return mixed       The value of the attribute
      */
@@ -65,7 +66,7 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
 
     /**
      * __isset: check if an attribute is set
-     * 
+     *
      * @param string $attr The name of the attribute
      * @return bool        True, when the attribute exists/ is set else false
      */
@@ -73,10 +74,10 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
     {
         return isset($this->data[$attr]);
     }
-    
+
     /**
      * __unset: removes a attribute
-     * 
+     *
      * @param string $attr The name of the attribute
      * @return void
      */
@@ -84,17 +85,17 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
     {
         unset($this->data[$attr]);
     }
-    
+
     /**
      * __toString: The whole content as a string
-     * 
+     *
      * @return string The content as a string
      */
     public function __toString(): string
     {
         $str = [];
         foreach ($this->data as $attr => $val) {
-            $str[] = $attr . ': ' . (string)$val;
+            $str[] = $attr . ': ' . (string) $val;
         }
         return implode(', ', $str);
     }
@@ -114,7 +115,7 @@ class Horde_Argv_Values implements IteratorAggregate, ArrayAccess, Countable
      * @param mixed $attr
      * @return mixed
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($attr)
     {
         return $this->data[$attr] ?? null;

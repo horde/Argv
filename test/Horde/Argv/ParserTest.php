@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Parser;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class ParserTest extends TestCase
@@ -18,32 +20,47 @@ class ParserTest extends TestCase
     {
         parent::setUp();
         $this->parser = new Horde_Argv_Parser();
-        $this->parser->addOption('-v', '--verbose', '-n', '--noisy',
-                                  array('action' => 'store_true', 'dest' => 'verbose'));
-        $this->parser->addOption('-q', '--quiet', '--silent',
-                                  array('action' => 'store_false', 'dest' => 'verbose'));
+        $this->parser->addOption(
+            '-v',
+            '--verbose',
+            '-n',
+            '--noisy',
+            ['action' => 'store_true', 'dest' => 'verbose']
+        );
+        $this->parser->addOption(
+            '-q',
+            '--quiet',
+            '--silent',
+            ['action' => 'store_false', 'dest' => 'verbose']
+        );
     }
 
     public function testAddOptionNoOption()
     {
         $this->expectException('InvalidArgumentException');
-        $this->assertTypeError(array($this->parser, 'addOption'),
-                               "not an Option instance: NULL", array(null));
+        $this->assertTypeError(
+            [$this->parser, 'addOption'],
+            "not an Option instance: NULL",
+            [null]
+        );
     }
 
     public function testAddOptionInvalidArguments()
     {
         $this->expectException('InvalidArgumentException');
-        $this->assertTypeError(array($this->parser, 'addOption'),
-                               "invalid arguments", null);
+        $this->assertTypeError(
+            [$this->parser, 'addOption'],
+            "invalid arguments",
+            null
+        );
     }
 
     public function testGetOption()
     {
         $opt1 = $this->parser->getOption("-v");
         $this->assertInstanceOf('Horde_Argv_Option', $opt1);
-        $this->assertEquals($opt1->shortOpts, array("-v", "-n"));
-        $this->assertEquals($opt1->longOpts, array("--verbose", "--noisy"));
+        $this->assertEquals($opt1->shortOpts, ["-v", "-n"]);
+        $this->assertEquals($opt1->longOpts, ["--verbose", "--noisy"]);
         $this->assertEquals($opt1->action, "store_true");
         $this->assertEquals($opt1->dest, "verbose");
     }
@@ -96,7 +113,7 @@ class ParserTest extends TestCase
     public function testRemoveNonexistent()
     {
         $this->expectException('InvalidArgumentException');
-        $this->assertRaises(array($this->parser, 'removeOption'), array('foo'), 'InvalidArgumentException', "no such option 'foo'");
+        $this->assertRaises([$this->parser, 'removeOption'], ['foo'], 'InvalidArgumentException', "no such option 'foo'");
     }
 
     /**

@@ -1,7 +1,8 @@
 <?php
 
 namespace Horde\Argv;
-use \Horde_Argv_Parser;
+
+use Horde_Argv_Parser;
 
 /**
  * @author     Chuck Hagenbuch <chuck@horde.org>
@@ -10,6 +11,7 @@ use \Horde_Argv_Parser;
  * @category   Horde
  * @package    Argv
  * @subpackage UnitTests
+ * @coversNothing
  */
 
 class CallbackMeddleArgsTest extends TestCase
@@ -17,13 +19,13 @@ class CallbackMeddleArgsTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $options = array();
+        $options = [];
         for ($i = -1; $i > -6; $i--) {
-            $options[] = $this->makeOption((string)$i, array('action' => 'callback',
-                                                             'callback' => array($this, 'process_n'),
-                                                             'dest' => 'things'));
+            $options[] = $this->makeOption((string) $i, ['action' => 'callback',
+                'callback' => [$this, 'process_n'],
+                'dest' => 'things']);
         }
-        $this->parser = new Horde_Argv_Parser(array('optionList' => $options));
+        $this->parser = new Horde_Argv_Parser(['optionList' => $options]);
     }
 
     /**
@@ -32,8 +34,8 @@ class CallbackMeddleArgsTest extends TestCase
     public function process_n($option, $opt, $value, $parser)
     {
         // option is -3, -5, etc.
-        $nargs = (int)substr($opt, 1);
-        $rargs =& $parser->rargs;
+        $nargs = (int) substr($opt, 1);
+        $rargs = & $parser->rargs;
         if (count($rargs) < $nargs) {
             $this->fail(sprintf("Expected %d arguments for %s option.", $nargs, $opt));
         }
@@ -44,16 +46,20 @@ class CallbackMeddleArgsTest extends TestCase
 
     public function testCallbackMeddleArgs()
     {
-        $this->assertParseOK(array("-1", "foo", "-3", "bar", "baz", "qux"),
-                             array('things' => array(array('foo'), array('bar', 'baz', 'qux'))),
-                             array(1, 3));
+        $this->assertParseOK(
+            ["-1", "foo", "-3", "bar", "baz", "qux"],
+            ['things' => [['foo'], ['bar', 'baz', 'qux']]],
+            [1, 3]
+        );
     }
 
     public function testCallbackMeddleArgsSeparator()
     {
-        $this->assertParseOK(array("-2", "foo", "--"),
-                             array('things' => array(array('foo', '--'))),
-                             array(2));
+        $this->assertParseOK(
+            ["-2", "foo", "--"],
+            ['things' => [['foo', '--']]],
+            [2]
+        );
     }
 
 }
