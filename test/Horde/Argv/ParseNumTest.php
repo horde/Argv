@@ -82,7 +82,9 @@ class ParseNumTest extends TestCase
             "option -l: invalid long integer value: '0b0123'"
         );
 
-        $this->assertParseFail(["-l", "0x12x"],
-            "option -l: invalid long integer value: '0x12x'");
+        $this->assertParseFail(
+            ["-l", "0x12x"],
+            "option -l: invalid long integer value: '0x12x'"
+        );
     }
 }

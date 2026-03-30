@@ -556,6 +556,8 @@ class Parser extends OptionContainer implements ArgvParser
                         } else {
                             $this->parserError(sprintf(Translation::t("%s option requires %d arguments"), $opt, $nargs));
                         }
+                    } else {
+                        $value = $option->default;
                     }
                 } elseif ($nargs == 1) {
                     $value = array_shift($rargs);
@@ -597,7 +599,7 @@ class Parser extends OptionContainer implements ArgvParser
         return $this->expandProgName($this->description);
     }
 
-    public function parserExit($status = 0, $msg = null)
+    public function parserExit($status = 0, $msg = null): never
     {
         if ($msg) {
             fwrite(STDERR, $msg);
@@ -611,8 +613,9 @@ class Parser extends OptionContainer implements ArgvParser
      * should either exit or raise an exception.
      *
      * @param string $msg
+     * @return never
      */
-    public function parserError($msg)
+    public function parserError($msg): never
     {
         $this->printUsage(STDERR);
         $this->parserExit(2, sprintf("%s: error: %s\n", $this->getProgName(), $msg));

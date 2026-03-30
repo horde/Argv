@@ -4,4 +4,7 @@ parameters:
   treatPhpDocTypesAsCertain: false
   paths:
     - src
+  excludePaths:
     - test
+  bootstrapFiles:
+    - /usr/local/bin/phpunit11

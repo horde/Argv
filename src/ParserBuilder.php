@@ -17,9 +17,9 @@ namespace Horde\Argv\Parser;
  * @deprecated This class is under development and not ready for production use.
  *             The API is incomplete and may change without notice. Do not use in production code.
  *
- * @todo Fix missing Parser interface reference
+ * @todo Define and implement Parser interface
  */
-class ParserBuilder implements Parser
+class ParserBuilder
 {
     public function withArgument(ParserArgument $argument) {}
 }

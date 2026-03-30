@@ -57,7 +57,7 @@ use ReflectionClass;
  * @copyright 2010-2017 Horde LLC
  * @license   http://www.horde.org/licenses/bsd BSD
  */
-class OptionContainer
+abstract class OptionContainer
 {
     public $description = '';
     public $optionList = [];
@@ -73,6 +73,8 @@ class OptionContainer
      * initialize at least the following instance attributes:
      * optionList, shortOpt, longOpt, defaults.
     */
+    abstract protected function _createOptionList();
+
     public function __construct($optionClass, $conflictHandler, $description)
     {
         $this->_createOptionList();

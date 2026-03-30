@@ -251,8 +251,10 @@ class StandardTest extends TestCase
 
     public function testOptionConsumesOptionLikeString()
     {
-        $this->assertParseOk(["-a", "-b3"],
+        $this->assertParseOk(
+            ["-a", "-b3"],
             ['a' => "-b3", 'boo' => null, 'foo' => null],
-            []);
+            []
+        );
     }
 }

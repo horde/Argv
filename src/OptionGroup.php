@@ -52,11 +52,6 @@ class OptionGroup extends OptionContainer
         $this->_title = $title;
     }
 
-    public function __destruct()
-    {
-        unset($this->optionList);
-    }
-
     // -- Help-formatting methods ---------------------------------------
 
     public function formatHelp($formatter = null)
